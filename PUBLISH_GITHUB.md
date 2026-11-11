@@ -2,6 +2,8 @@
 
 Esta guía está preparada para la cuenta **22danielblanco** y no presupone experiencia previa con GitHub.
 
+Si el repositorio ya existe, clónalo y actualiza sus archivos con esta entrega, conservando su historial. No crees un segundo repositorio.
+
 ## Opción A — La más sencilla: navegador web
 
 ### 1. Crear el repositorio
@@ -41,7 +43,7 @@ README.md
 5. Escribe un mensaje de commit como:
 
 ```text
-Initial portfolio v0.2
+Update portfolio v0.4
 ```
 
 6. Confirma la subida.

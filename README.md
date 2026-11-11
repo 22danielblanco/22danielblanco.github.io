@@ -1,129 +1,61 @@
-# Daniel Blanco — DANI PROJECTS Portfolio
+# Daniel Blanco de Miguel — Portfolio 0.4
 
-Public portfolio for **Daniel Blanco**, Biomedical Engineer / Digital Health Solutions.
+Portfolio profesional orientado a ingeniería biomédica, soluciones digitales en salud e IA. Parte del ZIP recuperado v0.2 y reconstruye los cambios solicitados que constaban en el historial posterior. No se ha recuperado el ZIP v0.3.
 
-The site is designed to showcase private product work without publishing the underlying applications. It combines approved screenshots, synthetic demos, case studies and a Three.js product constellation.
+## Inicio
 
-## Public profile
+Node.js 22.12+.
 
-- GitHub: `22danielblanco`
-- Portfolio repository: `22danielblanco.github.io`
-- Expected public URL: `https://22danielblanco.github.io/`
-- LinkedIn: `https://www.linkedin.com/in/daniel-blanco-de-miguel/`
-- Languages: Spanish / English (browser language is used on first visit; manual switch is available)
-
-## Projects represented
-
-1. AVI-MAMA — conversational Health AI interface
-2. HealthTech Career Studio — job intelligence and ATS-aware CV workflows
-3. Health Analytics Studio — operational analytics workspace
-4. Data Engineering Studio — ETL / DAG authoring workspace
-5. BusinessOS Studio — configurable vertical CRM
-6. Aula Studio — multi-school digital platform
-7. Wealthpilot — personal finance decision cockpit
-
-AVI-MAMA currently uses two **approved real screenshots**. The other products use synthetic UI demonstrations and fictitious data so the private applications remain isolated.
-
-## Privacy rule
-
-**Never copy production source code, API keys, private endpoints, customer/patient data, proprietary corpora or confidential datasets into this repository.**
-
-The portfolio must remain a presentation layer. If richer demos are added later, create sanitised standalone recreations rather than importing the real applications.
-
-## Run locally on Windows
-
-Install Node.js LTS. Then open PowerShell inside this folder:
-
-```powershell
-npm install
+```bash
+npm ci
 npm run dev
 ```
 
-Open the address shown by Vite, normally:
+Para compilar y probar la entrega:
 
-```text
-http://localhost:5173
-```
-
-Production test:
-
-```powershell
+```bash
 npm run build
 npm run preview
 ```
 
-## Publish on GitHub Pages
+## GitHub Pages
 
-The recommended repository name is exactly:
+Sube el contenido de esta carpeta a `22danielblanco.github.io` y selecciona **Settings → Pages → GitHub Actions**. El workflow incluido compila y publica `dist/` al hacer push a `main`. No subas la carpeta contenedora como un nivel adicional.
 
-```text
-22danielblanco.github.io
-```
+No abras `index.html` con doble clic: es el punto de entrada de Vite. Usa los comandos anteriores. Para alojamiento estático sin compilación, el contenido de `dist/` ya está generado.
 
-The included GitHub Actions workflow publishes every push to `main`.
+La entrega no se ha publicado ni ha modificado el repositorio remoto.
 
-### Easiest route if you are not used to GitHub
+## Contenido
 
-1. Sign in to GitHub as `22danielblanco`.
-2. Create a new repository named **`22danielblanco.github.io`**.
-3. Keep it **Public** for this portfolio. Do not upload any private application source code.
-4. Upload the contents of this folder to the repository.
-5. Open **Settings → Pages**.
-6. Under **Build and deployment**, select **GitHub Actions** as the source.
-7. Open the **Actions** tab and wait for `Deploy portfolio to GitHub Pages` to finish successfully.
-8. Visit `https://22danielblanco.github.io/`.
+12 proyectos: AVI-MAMA, Linfochat, InterOp Studio, Guardia-MIR, HealthTech Career Studio, BusinessOS Studio, Aula Studio, WealthPilot, ATLAS, Video Studio, Natalia Blanco y Biblioverse.
 
-A more detailed guide is included in [`PUBLISH_GITHUB.md`](./PUBLISH_GITHUB.md).
+Health Analytics Studio y Data Engineering Studio permanecen excluidos conforme a la petición previa. El portfolio no incorpora código de las aplicaciones privadas ni las claves necesarias para ejecutarlas.
 
-## Repository strategy
+## Estructura
 
-```text
-22danielblanco (GitHub account)
-│
-├─ 22danielblanco.github.io       PUBLIC   ← only this portfolio
-│
-├─ avi-mama                       PRIVATE  ← real application
-├─ healthtech-career-studio       PRIVATE
-├─ health-analytics-studio        PRIVATE
-├─ data-engineering-studio        PRIVATE
-├─ businessos-studio              PRIVATE
-├─ aula-studio                    PRIVATE
-└─ wealthpilot                    PRIVATE
-```
+- `src/projects.json`: fichas en español e inglés, funciones, stack, componentes, fuentes y medios.
+- `src/main.js`: catálogo, búsqueda, filtros, ficha modal, pestañas y galería.
+- `src/scene.js`: Three.js, controles orbitales, flujo animado y fallback SVG.
+- `src/style.css`: diseño adaptable y estados de accesibilidad.
+- `public/projects/`: medios de los proyectos; AVI incluye un vídeo aportado por el usuario.
+- `.github/workflows/deploy.yml`: publicación mediante GitHub Pages.
+- `AUDITORIA.md`: procedencia, alcance y limitaciones de la revisión.
 
-The public portfolio should never import or depend on those private repositories.
+## Arquitectura 3D
 
-## Current design
+Cada ficha contiene cinco componentes del flujo funcional. Se pueden seleccionar desde la escena o desde la lista, rotar y acercar la cámara, pausar el flujo y restablecer la vista. Una alternativa SVG y el flujo textual mantienen la información accesible cuando WebGL no está disponible.
 
-- Vite
-- Three.js animated product constellation
-- Responsive dark technical visual system
-- Spanish / English content
-- Real screenshot gallery for AVI-MAMA
-- Synthetic interactive visualisations for the remaining projects
-- Privacy explanation modal
-- GitHub / LinkedIn links
-- GitHub Pages deployment workflow
+Las visualizaciones son esquemas funcionales, no topologías físicas de despliegue. No representan, por ejemplo, que todos los componentes se ejecuten en máquinas distintas.
 
-## Updating AVI screenshots
+El render se suspende fuera de la vista y al ocultar la pestaña; se liberan geometrías, materiales y texturas al cerrar la ficha. Se respeta `prefers-reduced-motion`.
 
-The current public screenshots are stored in:
+## Imágenes
 
-```text
-public/projects/avi/avi-main.png
-public/projects/avi/avi-visual.png
-```
+Las fichas diferencian capturas, recursos del proyecto y esquemas. No se atribuye una interfaz inventada a una aplicación. Algunas capturas corresponden a una versión anterior a la documentación; la galería explica su procedencia. Consulta AUDITORIA.md para lo que falta completar.
 
-Replace those files with new approved screenshots using the same names to update the gallery without changing code.
+## Edición
 
-## Adding screenshots for another project
+Añade medios a `public/projects/<id>/` y sus rutas a `images` en `src/projects.json`. Revisa `mediaNote`, su traducción inglesa y el alcance de la versión cuando cambies capturas.
 
-Before adding any screenshot, verify that it contains no:
-
-- patient or customer information;
-- internal URLs or IP addresses;
-- credentials or API keys;
-- confidential company names or data;
-- proprietary prompts, corpora or implementation details that should remain private.
-
-Then add the image under `public/projects/<project>/` and update the relevant project object in `src/main.js`.
+La tipografía usa Google Fonts con fallback del sistema. No hay analítica ni formularios; los enlaces de contacto conducen a GitHub y LinkedIn.
