@@ -1,0 +1,3264 @@
+[
+  {
+    "id": "avi",
+    "title": "AVI-MAMA",
+    "category": "health",
+    "version": "0.15",
+    "tag": "IA conversacional · Pacientes",
+    "summary": "Un asistente multimodal para educación y acompañamiento en cáncer de mama. Une conversación, voz y un avatar con recuperación de conocimiento y recursos visuales contextuales.",
+    "features": [
+      "Conversación por texto y voz, con avatar y modo visual de acompañamiento.",
+      "Recuperación de documentos y citas para sustentar las respuestas.",
+      "Modo local y ruta avanzada opcional con proveedor configurable: Groq, Gemini u OpenAI.",
+      "Separación entre interfaz, recuperación de contexto, generación y comprobación de respuestas.",
+      "Recursos educativos, perfil y módulos de rehabilitación en la aplicación.",
+      "Entrada multimodal por texto y reconocimiento de voz (STT), con alternativas del navegador y procesamiento local.",
+      "Dos rutas de IA: recuperación local conservadora y conversación avanzada mediante servidor y proveedores API.",
+      "Planificación local opcional con Qwen sobre IDs de fragmentos autorizados y validación del resultado.",
+      "Verificación de citas y contenido de la respuesta remota antes de mostrarla o narrarla.",
+      "Narración TTS, estado de reproducción y animación del avatar mediante señales de voz y visemas.",
+      "Motor de recursos multimedia que genera un storyboard ligado al texto y se sincroniza con el progreso de la narración."
+    ],
+    "stack": [
+      "Angular",
+      "TypeScript",
+      "Three.js / GLB",
+      "Transformers.js",
+      "WebLLM",
+      "Node.js",
+      "BM25 / RAG"
+    ],
+    "nodes": [
+      {
+        "id": "input",
+        "name": "Texto y micrófono",
+        "detail": "Entrada escrita o captura de voz. El audio pasa a reconocimiento; el texto puede entrar directamente en la conversación.",
+        "x": -6,
+        "y": 4,
+        "z": 0
+      },
+      {
+        "id": "stt",
+        "name": "STT: voz a texto",
+        "detail": "SpeechService admite reconocimiento del navegador y Whisper local. La transcripción alimenta la misma conversación que el teclado.",
+        "x": -3,
+        "y": 4,
+        "z": 0
+      },
+      {
+        "id": "policy",
+        "name": "Contexto y políticas",
+        "detail": "RagService conserva contexto y aplica reglas de conversación, urgencia y restricciones antes de elegir la ruta de respuesta.",
+        "x": 0,
+        "y": 4,
+        "z": 0
+      },
+      {
+        "id": "corpus",
+        "name": "Corpus local",
+        "detail": "KnowledgeService carga bloques educativos, referencias y recursos. La caché vectorial evita recalcular el índice en cada consulta.",
+        "x": -6,
+        "y": 1,
+        "z": 0
+      },
+      {
+        "id": "local",
+        "name": "Recuperación local",
+        "detail": "Selección de evidencia por relevancia y cobertura. La ruta local conserva respuestas acotadas al contenido disponible.",
+        "x": -3,
+        "y": 1,
+        "z": 0
+      },
+      {
+        "id": "qwen",
+        "name": "Qwen opcional",
+        "detail": "El modelo local organiza identificadores de fragmentos autorizados. Su plan se valida: no debe confundirse con generación clínica libre.",
+        "x": -3,
+        "y": -2,
+        "z": 0
+      },
+      {
+        "id": "remote",
+        "name": "Servidor de IA",
+        "detail": "RemoteAiService transmite pregunta y contexto acotado al modo avanzado. Las credenciales de proveedores permanecen en el servidor.",
+        "x": 3,
+        "y": 4,
+        "z": 1
+      },
+      {
+        "id": "rag",
+        "name": "RAG servidor",
+        "detail": "Recuperador BM25 y búsqueda vectorial opcional con fusión de rangos sobre el corpus del servidor.",
+        "x": 6,
+        "y": 1,
+        "z": 1
+      },
+      {
+        "id": "api",
+        "name": "LLM por API",
+        "detail": "Adaptadores OpenAI, Groq y Gemini. Generación estructurada y verificación antes de aceptar la respuesta.",
+        "x": 3,
+        "y": 1,
+        "z": 1
+      },
+      {
+        "id": "answer",
+        "name": "Respuesta y citas",
+        "detail": "Punto de unión de los modos. Las respuestas remotas deben superar los controles de citas y contenido; ante fallo se usa la ruta local.",
+        "x": 0,
+        "y": -2,
+        "z": 0
+      },
+      {
+        "id": "tts",
+        "name": "TTS: texto a voz",
+        "detail": "SpeechService transforma el texto en narración, gestiona fragmentos y cancelaciones y publica progreso de reproducción.",
+        "x": -6,
+        "y": -5,
+        "z": 0
+      },
+      {
+        "id": "avatar",
+        "name": "Avatar y visemas",
+        "detail": "El avatar Three.js recibe señales de voz y visemas para acompañar la narración mediante animación.",
+        "x": -3,
+        "y": -5,
+        "z": 0
+      },
+      {
+        "id": "media",
+        "name": "Motor multimedia",
+        "detail": "MediaOrchestrator selecciona recursos vinculados a evidencias, evita duplicados y produce un storyboard asociado a tramos del texto.",
+        "x": 3,
+        "y": -2,
+        "z": 0
+      },
+      {
+        "id": "screen",
+        "name": "Panel sincronizado",
+        "detail": "El panel combina storyboard y avance de la voz para mostrar información relacionada con el pasaje que AVI está narrando.",
+        "x": 6,
+        "y": -5,
+        "z": 0
+      }
+    ],
+    "limit": "Prototipo educativo sin validación clínica. La integración Gemini está acotada a pruebas privadas; el corpus requiere revisión. Las capturas muestran la interfaz anterior 0.11.x.",
+    "source": "AVI_MAMA_IA_v0.15_Gemini.zip · README.md, package.json, src/app y server/",
+    "images": [
+      "projects/avi/avi-main.png",
+      "projects/avi/avi-visual.png"
+    ],
+    "en": {
+      "tag": "Conversational AI · Patients",
+      "summary": "A multimodal assistant for breast cancer education and support, combining conversation, voice and an avatar with knowledge retrieval and contextual visual resources.",
+      "features": [
+        "Text and voice conversation with an avatar and visual support mode.",
+        "Document retrieval and citations to support answers.",
+        "Local mode and an optional advanced route with Groq, Gemini or OpenAI configured on the server.",
+        "Separate interface, context retrieval, generation and answer verification layers.",
+        "Educational resources, a profile and rehabilitation modules.",
+        "Text and speech input through browser recognition or local transcription.",
+        "Conservative local retrieval and an advanced server/API conversation route.",
+        "Optional Qwen planning restricted to authorised fragment identifiers.",
+        "Citation and content verification before displaying or narrating remote answers.",
+        "TTS narration, playback state and voice-driven avatar animation.",
+        "Evidence-linked multimedia storyboard synchronised with narration progress."
+      ],
+      "nodes": [
+        {
+          "id": "input",
+          "name": "Text and microphone",
+          "detail": "Written input or voice capture. Audio goes through recognition; typed text enters conversation directly.",
+          "x": -6,
+          "y": 4,
+          "z": 0
+        },
+        {
+          "id": "stt",
+          "name": "STT: speech to text",
+          "detail": "SpeechService supports browser recognition and local Whisper. Both feed the conversation pipeline.",
+          "x": -3,
+          "y": 4,
+          "z": 0
+        },
+        {
+          "id": "policy",
+          "name": "Context and policies",
+          "detail": "RagService maintains context and applies conversational, urgency and restriction rules before selecting an answer route.",
+          "x": 0,
+          "y": 4,
+          "z": 0
+        },
+        {
+          "id": "corpus",
+          "name": "Local corpus",
+          "detail": "KnowledgeService loads educational blocks, references and resources. Vector caching avoids rebuilding the index for every query.",
+          "x": -6,
+          "y": 1,
+          "z": 0
+        },
+        {
+          "id": "local",
+          "name": "Local retrieval",
+          "detail": "Evidence is selected using relevance and coverage. Local answers remain bounded by available content.",
+          "x": -3,
+          "y": 1,
+          "z": 0
+        },
+        {
+          "id": "qwen",
+          "name": "Optional Qwen",
+          "detail": "The local model orders authorised fragment IDs. Its plan is validated; this is not unrestricted clinical generation.",
+          "x": -3,
+          "y": -2,
+          "z": 0
+        },
+        {
+          "id": "remote",
+          "name": "AI server",
+          "detail": "RemoteAiService sends the question and bounded context to the advanced mode. Provider credentials remain on the server.",
+          "x": 3,
+          "y": 4,
+          "z": 1
+        },
+        {
+          "id": "rag",
+          "name": "Server RAG",
+          "detail": "BM25 and optional vector retrieval with rank fusion operate on the server corpus.",
+          "x": 6,
+          "y": 1,
+          "z": 1
+        },
+        {
+          "id": "api",
+          "name": "LLM via API",
+          "detail": "OpenAI, Groq and Gemini adapters provide structured generation and verification before acceptance.",
+          "x": 3,
+          "y": 1,
+          "z": 1
+        },
+        {
+          "id": "answer",
+          "name": "Answer and citations",
+          "detail": "Both modes converge here. Remote answers must pass citation and content checks; failures fall back to the local route.",
+          "x": 0,
+          "y": -2,
+          "z": 0
+        },
+        {
+          "id": "tts",
+          "name": "TTS: text to speech",
+          "detail": "SpeechService narrates the text, manages chunks and cancellations, and publishes playback progress.",
+          "x": -6,
+          "y": -5,
+          "z": 0
+        },
+        {
+          "id": "avatar",
+          "name": "Avatar and visemes",
+          "detail": "The Three.js avatar uses voice and viseme signals to animate alongside narration.",
+          "x": -3,
+          "y": -5,
+          "z": 0
+        },
+        {
+          "id": "media",
+          "name": "Multimedia engine",
+          "detail": "MediaOrchestrator selects evidence-linked resources, deduplicates them and builds a storyboard aligned to text spans.",
+          "x": 3,
+          "y": -2,
+          "z": 0
+        },
+        {
+          "id": "screen",
+          "name": "Synchronised panel",
+          "detail": "The panel combines the storyboard and speech progress to display resources relevant to the passage being narrated.",
+          "x": 6,
+          "y": -5,
+          "z": 0
+        }
+      ],
+      "limit": "Educational prototype without clinical validation. Gemini is restricted to private testing and the corpus requires review. Screenshots show the earlier 0.11.x interface.",
+      "engineering": [
+        "Angular services separate conversation, retrieval, speech, multimedia orchestration and shared presentation state. See src/app/services/.",
+        "The local route works without a generative API. Optional Qwen orders authorised fragment IDs, with plan validation rather than unrestricted generation.",
+        "The server has its own corpus, BM25 and optional vector retrieval with rank fusion. Client-supplied sources are not automatically trusted evidence.",
+        "Remote generation uses structured contracts. Citation identifiers and source excerpts are checked, followed by verification covering the complete answer.",
+        "Provider adapters isolate OpenAI, Groq and Gemini. The frontend calls the application server, where provider credentials are configured.",
+        "Multimedia is a parallel output pipeline: evidence-linked resources, text-span storyboard and panel updates driven by narration progress.",
+        "Workers separate local model tasks, while vector caching reduces repeated computation. Runtime support depends on device capabilities and downloaded models.",
+        "Reviewed sources: src/app/services/, server/retriever.ts, server/engine.ts, server/provider-factory.ts and release 0.15 documentation."
+      ],
+      "edges": [
+        {
+          "to": "stt",
+          "label": "audio",
+          "from": "input"
+        },
+        {
+          "to": "policy",
+          "label": "text",
+          "from": "input"
+        },
+        {
+          "to": "policy",
+          "label": "transcript",
+          "from": "stt"
+        },
+        {
+          "to": "local",
+          "label": "local mode",
+          "from": "policy"
+        },
+        {
+          "to": "local",
+          "label": "evidence",
+          "from": "corpus"
+        },
+        {
+          "to": "qwen",
+          "label": "permitted IDs",
+          "from": "local"
+        },
+        {
+          "to": "answer",
+          "label": "validated plan",
+          "from": "qwen"
+        },
+        {
+          "to": "answer",
+          "label": "base response",
+          "from": "local"
+        },
+        {
+          "to": "remote",
+          "label": "advanced mode",
+          "from": "policy"
+        },
+        {
+          "to": "rag",
+          "label": "query",
+          "from": "remote"
+        },
+        {
+          "to": "api",
+          "label": "context and sources",
+          "from": "rag"
+        },
+        {
+          "to": "answer",
+          "label": "verified JSON",
+          "from": "api"
+        },
+        {
+          "to": "local",
+          "label": "error fallback",
+          "from": "remote"
+        },
+        {
+          "to": "tts",
+          "label": "stable text",
+          "from": "answer"
+        },
+        {
+          "to": "avatar",
+          "label": "voice and visemes",
+          "from": "tts"
+        },
+        {
+          "to": "media",
+          "label": "text and evidence",
+          "from": "answer"
+        },
+        {
+          "to": "screen",
+          "label": "storyboard",
+          "from": "media"
+        },
+        {
+          "to": "screen",
+          "label": "progress",
+          "from": "tts"
+        }
+      ]
+    },
+    "edges": [
+      {
+        "to": "stt",
+        "label": "audio",
+        "from": "input"
+      },
+      {
+        "to": "policy",
+        "label": "texto",
+        "from": "input"
+      },
+      {
+        "to": "policy",
+        "label": "transcripción",
+        "from": "stt"
+      },
+      {
+        "to": "local",
+        "label": "modo local",
+        "from": "policy"
+      },
+      {
+        "to": "local",
+        "label": "evidencia",
+        "from": "corpus"
+      },
+      {
+        "to": "qwen",
+        "label": "IDs autorizados",
+        "from": "local"
+      },
+      {
+        "to": "answer",
+        "label": "plan validado",
+        "from": "qwen"
+      },
+      {
+        "to": "answer",
+        "label": "respuesta base",
+        "from": "local"
+      },
+      {
+        "to": "remote",
+        "label": "modo avanzado",
+        "from": "policy"
+      },
+      {
+        "to": "rag",
+        "label": "consulta",
+        "from": "remote"
+      },
+      {
+        "to": "api",
+        "label": "contexto y fuentes",
+        "from": "rag"
+      },
+      {
+        "to": "answer",
+        "label": "JSON verificado",
+        "from": "api"
+      },
+      {
+        "to": "local",
+        "label": "fallback por fallo",
+        "from": "remote"
+      },
+      {
+        "to": "tts",
+        "label": "texto estable",
+        "from": "answer"
+      },
+      {
+        "to": "avatar",
+        "label": "voz y visemas",
+        "from": "tts"
+      },
+      {
+        "to": "media",
+        "label": "texto y evidencia",
+        "from": "answer"
+      },
+      {
+        "to": "screen",
+        "label": "storyboard",
+        "from": "media"
+      },
+      {
+        "to": "screen",
+        "label": "progreso",
+        "from": "tts"
+      }
+    ],
+    "engineering": [
+      "Separación de responsabilidades en servicios Angular: rag.service.ts coordina conversación y recuperación; speech.service.ts controla voz; media-orchestrator.service.ts prepara recursos; ui-state.service.ts comparte estado de presentación.",
+      "La interfaz conserva una ruta sin API generativa. El modelo Qwen local organiza fragmentos: la validación del plan mantiene los identificadores dentro del conjunto autorizado.",
+      "El servidor dispone de corpus propio y recuperador BM25, con búsqueda vectorial opcional y fusión de rangos. No acepta como evidencia autorizada cualquier fuente que envíe el cliente.",
+      "La generación remota utiliza un contrato estructurado. Los identificadores de citas deben existir y los extractos deben encontrarse en la evidencia recuperada; la verificación incluye introducción y cierre.",
+      "Los adaptadores de proveedor aíslan la lógica de OpenAI, Groq y Gemini. La interfaz se comunica con la API de la aplicación y las claves se configuran en el servidor.",
+      "La multimedia se trata como un flujo paralelo a la voz: recursos vinculados a evidencia, storyboard con intervalos de texto y actualización del panel según la posición narrada.",
+      "La separación en workers de tareas de modelos locales y el uso de caché vectorial reducen trabajo repetido. La disponibilidad efectiva depende del dispositivo y de haber descargado los modelos.",
+      "Fuentes de revisión: src/app/services/, server/retriever.ts, server/engine.ts, server/provider-factory.ts y documentación técnica de la entrega 0.15."
+    ]
+  },
+  {
+    "id": "linfochat",
+    "title": "Linfochat",
+    "category": "health",
+    "version": "2024 · Hackathon",
+    "tag": "IA generativa · Linfedema",
+    "summary": "Aplicación web con inteligencia artificial generativa y arquitectura RAG para proporcionar información y apoyo a pacientes con linfedema durante su asistencia y rehabilitación.",
+    "features": [
+      "Consulta de dudas mediante una interfaz conversacional.",
+      "Información y apoyo orientados a pacientes con linfedema.",
+      "Enfoque en el acompañamiento durante la asistencia y la rehabilitación.",
+      "Uso de LLMs y arquitectura RAG, documentado en el CV.",
+      "Ganador del reto Comunicación en Salud — Premio General, categoría Growth — del IX Hackathon Salud de COM Salud (diciembre de 2024)."
+    ],
+    "stack": [
+      "Angular",
+      "Ionic",
+      "LLMs",
+      "RAG"
+    ],
+    "nodes": [
+      {
+        "id": "question",
+        "x": -6,
+        "y": 2,
+        "z": 0,
+        "name": "Consulta",
+        "detail": "La persona plantea una pregunta sobre linfedema."
+      },
+      {
+        "id": "web",
+        "x": -3,
+        "y": 2,
+        "z": 0,
+        "name": "Angular e Ionic",
+        "detail": "Tecnologías que el CV atribuye a la aplicación web."
+      },
+      {
+        "id": "knowledge",
+        "x": -3,
+        "y": -2,
+        "z": 1,
+        "name": "Conocimiento",
+        "detail": "Componente conceptual del patrón RAG. El corpus concreto está pendiente de verificar."
+      },
+      {
+        "id": "retrieve",
+        "x": 0,
+        "y": -2,
+        "z": 1,
+        "name": "Recuperación RAG",
+        "detail": "El patrón recupera contexto relevante para la pregunta."
+      },
+      {
+        "id": "generate",
+        "x": 3,
+        "y": 2,
+        "z": 1,
+        "name": "Modelo generativo",
+        "detail": "El CV documenta el uso de modelos de lenguaje."
+      },
+      {
+        "id": "answer",
+        "x": 6,
+        "y": 2,
+        "z": 0,
+        "name": "Apoyo informativo",
+        "detail": "Finalidad documentada durante la asistencia y rehabilitación."
+      }
+    ],
+    "limit": "Ficha basada en el CV y en la confirmación del autor. No se ha recuperado el código ni capturas. El diagrama representa el patrón conceptual de una aplicación RAG, no una topología de implementación verificada.",
+    "source": "Daniel_Blanco_de_Miguel_FlowCV_Resume_2026-11-09 (2).pdf · página 2: Proyectos Propios y Reconocimientos y premios. Periodo: noviembre–diciembre de 2024.",
+    "images": [],
+    "en": {
+      "tag": "Generative AI · Lymphoedema",
+      "summary": "A web application using generative AI and RAG to provide information and support to people with lymphoedema during care and rehabilitation.",
+      "features": [
+        "Conversational interface for asking questions.",
+        "Information and support for people with lymphoedema.",
+        "Focus on support throughout care and rehabilitation.",
+        "LLMs and RAG architecture documented in the CV.",
+        "Winner of the Health Communication challenge — General Award, Growth category — at COM Salud’s IX Hackathon Salud (December 2024)."
+      ],
+      "nodes": [
+        {
+          "id": "question",
+          "x": -6,
+          "y": 2,
+          "z": 0,
+          "name": "Question",
+          "detail": "A person asks about lymphoedema."
+        },
+        {
+          "id": "web",
+          "x": -3,
+          "y": 2,
+          "z": 0,
+          "name": "Angular and Ionic",
+          "detail": "Technologies attributed to the web app by the CV."
+        },
+        {
+          "id": "knowledge",
+          "x": -3,
+          "y": -2,
+          "z": 1,
+          "name": "Knowledge",
+          "detail": "Conceptual RAG component. The actual corpus remains unverified."
+        },
+        {
+          "id": "retrieve",
+          "x": 0,
+          "y": -2,
+          "z": 1,
+          "name": "RAG retrieval",
+          "detail": "The pattern retrieves context relevant to the question."
+        },
+        {
+          "id": "generate",
+          "x": 3,
+          "y": 2,
+          "z": 1,
+          "name": "Generative model",
+          "detail": "The CV documents the use of language models."
+        },
+        {
+          "id": "answer",
+          "x": 6,
+          "y": 2,
+          "z": 0,
+          "name": "Informational support",
+          "detail": "Documented purpose during care and rehabilitation."
+        }
+      ],
+      "limit": "Based on the CV and author confirmation. Source code and screenshots have not been recovered. The diagram shows a conceptual RAG pattern, not a verified implementation topology.",
+      "edges": [
+        {
+          "from": "question",
+          "to": "web",
+          "label": "question"
+        },
+        {
+          "from": "web",
+          "to": "retrieve",
+          "label": "query"
+        },
+        {
+          "from": "knowledge",
+          "to": "retrieve",
+          "label": "content"
+        },
+        {
+          "from": "retrieve",
+          "to": "generate",
+          "label": "context"
+        },
+        {
+          "from": "web",
+          "to": "generate",
+          "label": "question"
+        },
+        {
+          "from": "generate",
+          "to": "answer",
+          "label": "answer"
+        }
+      ],
+      "engineering": [
+        "The CV identifies Angular and Ionic as the web application technologies. The conversational interface is the entry point for lymphoedema queries.",
+        "The documented RAG pattern combines retrieval and generation. The diagram illustrates how a question and retrieved context can reach the model.",
+        "The stated purpose is to provide information and support during care and rehabilitation. COM Salud recognised the project in the Health Communication challenge, Growth category.",
+        "Available evidence identifies the pattern and technologies. The model provider, document index and deployment remain to be confirmed from source code."
+      ]
+    },
+    "edges": [
+      {
+        "from": "question",
+        "to": "web",
+        "label": "pregunta"
+      },
+      {
+        "from": "web",
+        "to": "retrieve",
+        "label": "consulta"
+      },
+      {
+        "from": "knowledge",
+        "to": "retrieve",
+        "label": "contenido"
+      },
+      {
+        "from": "retrieve",
+        "to": "generate",
+        "label": "contexto"
+      },
+      {
+        "from": "web",
+        "to": "generate",
+        "label": "pregunta"
+      },
+      {
+        "from": "generate",
+        "to": "answer",
+        "label": "respuesta"
+      }
+    ],
+    "engineering": [
+      "El CV identifica Angular e Ionic como tecnologías de la aplicación web. La ficha presenta la interfaz conversacional como punto de acceso para las consultas sobre linfedema.",
+      "El patrón RAG documentado conecta recuperación y generación. El diagrama ilustra cómo una pregunta y un contexto recuperado pueden alimentar al modelo.",
+      "El propósito recogido en el CV es ofrecer información y apoyo durante la asistencia y la rehabilitación. El reconocimiento de COM Salud corresponde al reto de Comunicación en Salud, categoría Growth.",
+      "La evidencia disponible permite identificar el patrón y las tecnologías. El proveedor del modelo, el índice documental y el despliegue quedan pendientes de comprobación con el código."
+    ]
+  },
+  {
+    "id": "interop",
+    "title": "InterOp Studio",
+    "category": "health",
+    "version": "2.9",
+    "tag": "Interoperabilidad · HL7 → FHIR",
+    "summary": "Un entorno visual para comprender mensajes hospitalarios, diseñar mappings por hospital y explorar cómo los eventos cambian el estado longitudinal de un paciente.",
+    "features": [
+      "Catálogos de mensajes, segmentos, campos HL7 y estructuras FHIR con definiciones.",
+      "Editor visual de mappings, transformaciones y condiciones independientes por hospital.",
+      "Laboratorio de secuencias: árbol expandible, segmentos plegables y diferencias entre mensajes.",
+      "Simulación longitudinal con cancelaciones, duplicados y eventos fuera de orden.",
+      "Terminologías HL7/FHIR y búsqueda de correspondencias CIE-9 ↔ CIE-10 con importaciones.",
+      "Inspeccionar un cambio de episodio plegando MSH y abriendo PID o PV1 para localizar el campo que ha variado.",
+      "Relacionar campos de varias fuentes con un recurso destino mediante transformaciones y condiciones del perfil activo."
+    ],
+    "stack": [
+      "JavaScript",
+      "HTML / CSS",
+      "HL7 v2",
+      "FHIR R4",
+      "JSON / CSV",
+      "localStorage"
+    ],
+    "nodes": [
+      {
+        "id": "msg",
+        "x": -6,
+        "y": 2,
+        "z": 0,
+        "name": "Mensajes HL7",
+        "detail": "Secuencias pegadas y ejemplos de eventos hospitalarios."
+      },
+      {
+        "id": "parser",
+        "x": -3,
+        "y": 2,
+        "z": 0,
+        "name": "Parser HL7",
+        "detail": "Descompone el mensaje según segmentos, campos y componentes."
+      },
+      {
+        "id": "catalog",
+        "x": -3,
+        "y": -2,
+        "z": 1,
+        "name": "Catálogos",
+        "detail": "Definiciones HL7 y FHIR y tablas de valores."
+      },
+      {
+        "id": "profile",
+        "x": 0,
+        "y": 4,
+        "z": 1,
+        "name": "Perfil hospital",
+        "detail": "Selecciona reglas y transformaciones del centro."
+      },
+      {
+        "id": "map",
+        "x": 1,
+        "y": 1,
+        "z": 0,
+        "name": "Ejecutor de mappings",
+        "detail": "Evalúa campos, transformaciones y condiciones."
+      },
+      {
+        "id": "fhir",
+        "x": 5,
+        "y": 1,
+        "z": 0,
+        "name": "Proyección FHIR",
+        "detail": "Expone los recursos de referencia construidos."
+      },
+      {
+        "id": "diff",
+        "x": 0,
+        "y": -3,
+        "z": 0,
+        "name": "Laboratorio HL7",
+        "detail": "Compara campos y expone el árbol plegable."
+      },
+      {
+        "id": "journey",
+        "x": 4,
+        "y": -3,
+        "z": 1,
+        "name": "Estado longitudinal",
+        "detail": "Interpreta secuencias, cancelaciones y cambios de estado."
+      }
+    ],
+    "limit": "Herramienta educativa y de diseño. No es un servidor FHIR ni una certificación de conformidad; los candidatos CIE requieren verificación.",
+    "source": "InterOp_Studio_v2_9_Laboratorio_Plegado_Segmentos_HL7.zip · app.js, mapping-visual.js, visual-executor.js, journey-engine.js, hl7-sequence.js",
+    "images": [
+      "projects/interop/mappings.webp",
+      "projects/interop/laboratory.webp",
+      "projects/interop/home.webp"
+    ],
+    "en": {
+      "tag": "Interoperability · HL7 → FHIR",
+      "summary": "A visual environment to understand hospital messages, design hospital-specific mappings and explore how events change a patient’s longitudinal state.",
+      "features": [
+        "Message, segment and field catalogues with HL7 and FHIR definitions.",
+        "Visual mappings, transformations and conditions for each hospital.",
+        "Sequence laboratory with expandable trees, collapsible segments and message differences.",
+        "Longitudinal simulation including cancellations, duplicates and out-of-order events.",
+        "HL7/FHIR terminology and ICD-9 ↔ ICD-10 mapping exploration with imports.",
+        "Inspect an encounter update by collapsing MSH and opening PID or PV1 to find the field that changed.",
+        "Connect fields from several sources to a target resource using the active profile’s transformations and conditions."
+      ],
+      "nodes": [
+        {
+          "id": "msg",
+          "x": -6,
+          "y": 2,
+          "z": 0,
+          "name": "HL7 messages",
+          "detail": "Pasted sequences and sample hospital events."
+        },
+        {
+          "id": "parser",
+          "x": -3,
+          "y": 2,
+          "z": 0,
+          "name": "HL7 parser",
+          "detail": "Splits the message into segments, fields and components."
+        },
+        {
+          "id": "catalog",
+          "x": -3,
+          "y": -2,
+          "z": 1,
+          "name": "Catalogues",
+          "detail": "HL7 and FHIR definitions and value tables."
+        },
+        {
+          "id": "profile",
+          "x": 0,
+          "y": 4,
+          "z": 1,
+          "name": "Hospital profile",
+          "detail": "Selects site-specific rules and transformations."
+        },
+        {
+          "id": "map",
+          "x": 1,
+          "y": 1,
+          "z": 0,
+          "name": "Mapping executor",
+          "detail": "Evaluates fields, transformations and conditions."
+        },
+        {
+          "id": "fhir",
+          "x": 5,
+          "y": 1,
+          "z": 0,
+          "name": "FHIR projection",
+          "detail": "Displays the resulting reference resources."
+        },
+        {
+          "id": "diff",
+          "x": 0,
+          "y": -3,
+          "z": 0,
+          "name": "HL7 laboratory",
+          "detail": "Compares fields and displays a collapsible tree."
+        },
+        {
+          "id": "journey",
+          "x": 4,
+          "y": -3,
+          "z": 1,
+          "name": "Longitudinal state",
+          "detail": "Interprets sequences, cancellations and state changes."
+        }
+      ],
+      "limit": "An educational design tool, not a FHIR server or conformance certification. ICD mapping candidates require verification.",
+      "edges": [
+        {
+          "from": "msg",
+          "to": "parser",
+          "label": "HL7 text"
+        },
+        {
+          "from": "parser",
+          "to": "diff",
+          "label": "ordered fields"
+        },
+        {
+          "from": "catalog",
+          "to": "diff",
+          "label": "definitions"
+        },
+        {
+          "from": "parser",
+          "to": "map",
+          "label": "values"
+        },
+        {
+          "from": "profile",
+          "to": "map",
+          "label": "active rules"
+        },
+        {
+          "from": "catalog",
+          "to": "map",
+          "label": "references"
+        },
+        {
+          "from": "map",
+          "to": "fhir",
+          "label": "target fields"
+        },
+        {
+          "from": "parser",
+          "to": "journey",
+          "label": "events"
+        }
+      ],
+      "engineering": [
+        "The parser preserves message, segment, field and component positions. The catalogue adds functional meaning while keeping the original location available for inspection.",
+        "Hospital profiles encapsulate mappings, transformations and conditions. A message can be evaluated under different rules to compare its projections.",
+        "The visual executor relates HL7 sources to rules and FHIR fields. The sequence laboratory uses parsed messages to compare consecutive events, while longitudinal simulation preserves context across the sequence.",
+        "Project tests isolate profiles, visual execution, HL7 sequences and patient journeys in mapping-profiles.test.js, visual-executor.test.js, hl7-sequence.test.js and journey-engine.test.js."
+      ]
+    },
+    "edges": [
+      {
+        "from": "msg",
+        "to": "parser",
+        "label": "texto HL7"
+      },
+      {
+        "from": "parser",
+        "to": "diff",
+        "label": "campos ordenados"
+      },
+      {
+        "from": "catalog",
+        "to": "diff",
+        "label": "significado"
+      },
+      {
+        "from": "parser",
+        "to": "map",
+        "label": "valores"
+      },
+      {
+        "from": "profile",
+        "to": "map",
+        "label": "reglas activas"
+      },
+      {
+        "from": "catalog",
+        "to": "map",
+        "label": "referencias"
+      },
+      {
+        "from": "map",
+        "to": "fhir",
+        "label": "campos destino"
+      },
+      {
+        "from": "parser",
+        "to": "journey",
+        "label": "eventos"
+      }
+    ],
+    "engineering": [
+      "El parser conserva la estructura mensaje–segmento–campo–componente. El catálogo añade significado funcional sin perder la posición original, de modo que se puede volver desde la interpretación al dato recibido.",
+      "El perfil hospitalario encapsula los mappings, transformaciones y condiciones aplicables. Así, la misma entrada puede evaluarse con reglas distintas y comparar las proyecciones resultantes.",
+      "El ejecutor visual relaciona fuentes HL7 con reglas y campos FHIR. El laboratorio de secuencias consume el mensaje analizado para comparar eventos consecutivos, mientras la simulación longitudinal conserva el contexto de la secuencia.",
+      "Las pruebas del proyecto aíslan perfiles, ejecución visual, secuencias HL7 y recorridos longitudinales en mapping-profiles.test.js, visual-executor.test.js, hl7-sequence.test.js y journey-engine.test.js."
+    ]
+  },
+  {
+    "id": "guardia",
+    "title": "Guardia-MIR",
+    "category": "health",
+    "version": "IA local v1",
+    "tag": "Organización · Profesionales sanitarios",
+    "summary": "Una aplicación de agenda y organización para la residencia sanitaria: guardias, rotaciones, libranzas y cuaderno, con un asistente que interpreta órdenes en el dispositivo.",
+    "features": [
+      "Calendario, registro de guardias, estadísticas, rotaciones y libranzas.",
+      "Cuaderno de notas y plantillas para organizar el trabajo.",
+      "Exportación iCalendar y copias de seguridad mediante servicios de la aplicación.",
+      "IA local con salida JSON restringida a intenciones admitidas.",
+      "Validación de horarios y resolución de actividades antes de realizar cambios.",
+      "Combinar la planificación de guardias con rotaciones y jornadas de descanso en la misma agenda.",
+      "Introducir instrucciones en lenguaje natural y resolver la actividad concreta antes de aplicarlas al registro local."
+    ],
+    "stack": [
+      "Angular",
+      "Ionic",
+      "Capacitor",
+      "SQLite",
+      "TypeScript",
+      "Transformers.js",
+      "ONNX / WebGPU / WASM"
+    ],
+    "nodes": [
+      {
+        "id": "pages",
+        "x": -6,
+        "y": 2,
+        "z": 0,
+        "name": "Agenda y cuaderno",
+        "detail": "Calendario, notas y plantillas de la residencia."
+      },
+      {
+        "id": "input",
+        "x": -6,
+        "y": -2,
+        "z": 0,
+        "name": "Instrucción",
+        "detail": "Entrada de lenguaje natural para una acción de agenda."
+      },
+      {
+        "id": "nlu",
+        "x": -3,
+        "y": -2,
+        "z": 1,
+        "name": "Modelo local",
+        "detail": "Interpreta la orden en el dispositivo."
+      },
+      {
+        "id": "contract",
+        "x": 0,
+        "y": -2,
+        "z": 0,
+        "name": "Contrato de comandos",
+        "detail": "Comprueba la intención y resuelve la actividad."
+      },
+      {
+        "id": "domain",
+        "x": 0,
+        "y": 2,
+        "z": 0,
+        "name": "Servicios de agenda",
+        "detail": "Aplica las reglas de guardias, horarios y notas."
+      },
+      {
+        "id": "db",
+        "x": 3,
+        "y": 2,
+        "z": 1,
+        "name": "SQLite",
+        "detail": "Conserva los registros en el dispositivo."
+      },
+      {
+        "id": "ics",
+        "x": 5,
+        "y": -1,
+        "z": 0,
+        "name": "Calendario ICS",
+        "detail": "Genera un calendario intercambiable."
+      },
+      {
+        "id": "backup",
+        "x": 3,
+        "y": 4,
+        "z": 1,
+        "name": "Copia de seguridad",
+        "detail": "Gestiona la copia de los registros de la aplicación."
+      }
+    ],
+    "limit": "La entrega disponible contiene src y el parche IA, sin el proyecto de compilación completo. La IA requiere pruebas en los dispositivos de destino.",
+    "source": "guardia-mir-src-ai-local-v1.zip · AI_LOCAL_IMPLEMENTATION.md, src/app/core/services y src/app/pages",
+    "images": [
+      "projects/guardia/onboarding.webp"
+    ],
+    "en": {
+      "tag": "Organisation · Healthcare professionals",
+      "summary": "A planning application for medical residency: shifts, rotations, rest days and notes, with an assistant that interprets instructions on the device.",
+      "features": [
+        "Calendar, shift records, statistics, rotations and rest days.",
+        "Notes and templates to organise work.",
+        "iCalendar export and backups through application services.",
+        "Local AI with JSON output restricted to supported intents.",
+        "Schedule validation and activity resolution before making changes.",
+        "Combine shift planning with rotations and rest days in one schedule.",
+        "Enter natural-language instructions and resolve the target activity before applying them to local records."
+      ],
+      "nodes": [
+        {
+          "id": "pages",
+          "x": -6,
+          "y": 2,
+          "z": 0,
+          "name": "Agenda and notebook",
+          "detail": "Residency calendar, notes and templates."
+        },
+        {
+          "id": "input",
+          "x": -6,
+          "y": -2,
+          "z": 0,
+          "name": "Instruction",
+          "detail": "Natural-language input for a schedule action."
+        },
+        {
+          "id": "nlu",
+          "x": -3,
+          "y": -2,
+          "z": 1,
+          "name": "Local model",
+          "detail": "Interprets the instruction on the device."
+        },
+        {
+          "id": "contract",
+          "x": 0,
+          "y": -2,
+          "z": 0,
+          "name": "Command contract",
+          "detail": "Checks the intent and resolves the activity."
+        },
+        {
+          "id": "domain",
+          "x": 0,
+          "y": 2,
+          "z": 0,
+          "name": "Scheduling services",
+          "detail": "Applies rules for shifts, schedules and notes."
+        },
+        {
+          "id": "db",
+          "x": 3,
+          "y": 2,
+          "z": 1,
+          "name": "SQLite",
+          "detail": "Keeps records on the device."
+        },
+        {
+          "id": "ics",
+          "x": 5,
+          "y": -1,
+          "z": 0,
+          "name": "ICS calendar",
+          "detail": "Produces an exchangeable calendar."
+        },
+        {
+          "id": "backup",
+          "x": 3,
+          "y": 4,
+          "z": 1,
+          "name": "Backup",
+          "detail": "Manages a copy of application records."
+        }
+      ],
+      "limit": "The recovered delivery contains src and the AI patch without a complete build project. AI requires target-device testing.",
+      "mediaNote": "Screenshot of the recovered onboarding form running in a reconstructed build environment. This does not validate other features or AI.",
+      "edges": [
+        {
+          "from": "pages",
+          "to": "domain",
+          "label": "manual edit"
+        },
+        {
+          "from": "input",
+          "to": "nlu",
+          "label": "text"
+        },
+        {
+          "from": "nlu",
+          "to": "contract",
+          "label": "JSON intent"
+        },
+        {
+          "from": "contract",
+          "to": "domain",
+          "label": "validated action"
+        },
+        {
+          "from": "domain",
+          "to": "db",
+          "label": "persistence"
+        },
+        {
+          "from": "db",
+          "to": "backup",
+          "label": "records"
+        },
+        {
+          "from": "domain",
+          "to": "ics",
+          "label": "shifts"
+        }
+      ],
+      "engineering": [
+        "Ionic calendar and notebook pages separate interaction from storage operations. Shift, rotation, template and note models describe the data passed to services.",
+        "local-ai.service.ts encapsulates on-device interpretation. Small models require an initial download and WebGPU or WASM support depends on the device.",
+        "The ai-command.model.ts contract limits the actions the model can express. Validation and deterministic activity resolution sit between interpretation and writes.",
+        "horario.service.ts, plantilla.service.ts and nota.service.ts own domain-specific operations. database.ts centralises local access and backup.service.ts manages backups."
+      ]
+    },
+    "mediaNote": "Captura del formulario inicial del código recuperado, ejecutado en un entorno de compilación reconstruido. No valida el resto de funciones ni la IA.",
+    "edges": [
+      {
+        "from": "pages",
+        "to": "domain",
+        "label": "edición manual"
+      },
+      {
+        "from": "input",
+        "to": "nlu",
+        "label": "texto"
+      },
+      {
+        "from": "nlu",
+        "to": "contract",
+        "label": "intención JSON"
+      },
+      {
+        "from": "contract",
+        "to": "domain",
+        "label": "acción validada"
+      },
+      {
+        "from": "domain",
+        "to": "db",
+        "label": "persistencia"
+      },
+      {
+        "from": "db",
+        "to": "backup",
+        "label": "registros"
+      },
+      {
+        "from": "domain",
+        "to": "ics",
+        "label": "guardias"
+      }
+    ],
+    "engineering": [
+      "Las páginas Ionic de calendario y cuaderno separan la interacción de las operaciones de almacenamiento. Los modelos de guardia, rotación, plantilla y nota definen los datos que manejan los servicios.",
+      "local-ai.service.ts encapsula la interpretación en el dispositivo. Los modelos pequeños se descargan inicialmente y las capacidades WebGPU o WASM dependen del equipo.",
+      "El contrato ai-command.model.ts acota las acciones que puede expresar el modelo. La validación y la resolución determinista de actividades se interponen entre interpretación y escritura.",
+      "horario.service.ts, plantilla.service.ts y nota.service.ts aplican operaciones específicas. database.ts concentra el acceso local y backup.service.ts gestiona copias del registro."
+    ]
+  },
+  {
+    "id": "career",
+    "title": "HealthTech Career Studio",
+    "category": "health",
+    "version": "0.10 + mejoras",
+    "tag": "Carrera profesional · HealthTech",
+    "summary": "Un espacio de trabajo para descubrir oportunidades del sector HealthTech, explicar el encaje de un perfil y adaptar el CV a partir de experiencias y hechos verificables.",
+    "features": [
+      "Ingesta de ofertas desde adaptadores ATS y fuentes configuradas.",
+      "Normalización de descripciones, deduplicación, filtros y catálogo de empresas.",
+      "Matching explicable por requisitos, habilidades, experiencia, idiomas y ubicación.",
+      "CV Studio y Fact Bank: adaptación del CV limitada por la evidencia del candidato.",
+      "Seguimiento de candidaturas, compatibilidad de trabajo remoto y datos privados locales.",
+      "Explorar empresas y fuentes para localizar vacantes y revisar la cobertura del catálogo.",
+      "Comparar versiones del CV y exportar una candidatura apoyada en hechos documentados."
+    ],
+    "stack": [
+      "Angular",
+      "TypeScript",
+      "Capacitor",
+      "IndexedDB",
+      "Node.js",
+      "GitHub Actions",
+      "Embeddings locales"
+    ],
+    "nodes": [
+      {
+        "id": "ats",
+        "x": -6,
+        "y": 3,
+        "z": 0,
+        "name": "Fuentes ATS",
+        "detail": "Vacantes de portales y sistemas de selección configurados."
+      },
+      {
+        "id": "ingest",
+        "x": -3,
+        "y": 3,
+        "z": 1,
+        "name": "Ingesta Node.js",
+        "detail": "Adapta, limpia y consolida ofertas."
+      },
+      {
+        "id": "catalog",
+        "x": 0,
+        "y": 3,
+        "z": 0,
+        "name": "Índices JSON",
+        "detail": "Publican el catálogo consultable por el cliente."
+      },
+      {
+        "id": "profile",
+        "x": -4,
+        "y": -2,
+        "z": 1,
+        "name": "Perfil y hechos",
+        "detail": "IndexedDB conserva experiencias, competencias y CV."
+      },
+      {
+        "id": "match",
+        "x": 0,
+        "y": 0,
+        "z": 0,
+        "name": "Encaje explicable",
+        "detail": "Compara requisitos de la vacante con el perfil."
+      },
+      {
+        "id": "tailor",
+        "x": 2,
+        "y": -3,
+        "z": 0,
+        "name": "Adaptación de CV",
+        "detail": "Construye una propuesta adaptada a la oferta."
+      },
+      {
+        "id": "guard",
+        "x": 5,
+        "y": -3,
+        "z": 1,
+        "name": "Control de evidencia",
+        "detail": "Contrasta la propuesta con los hechos aportados."
+      },
+      {
+        "id": "track",
+        "x": 5,
+        "y": 2,
+        "z": 0,
+        "name": "Candidaturas",
+        "detail": "Permite registrar y seguir el proceso de candidatura."
+      }
+    ],
+    "limit": "El score de encaje es heurístico, no una probabilidad de contratación. La disponibilidad de fuentes depende de sus permisos y configuración.",
+    "source": "healthtech-career-studio-v0.10.0(1).zip + overlay-performance-data-quality-v2 · docs/ARCHITECTURE.md, tools/ingestion, src/app",
+    "images": [
+      "projects/career/ai.webp",
+      "projects/career/home.webp"
+    ],
+    "en": {
+      "tag": "Career development · HealthTech",
+      "summary": "A workspace to discover HealthTech opportunities, explain candidate fit and adapt a CV using verifiable experience and facts.",
+      "features": [
+        "Job ingestion through configured ATS adapters and sources.",
+        "Description normalisation, deduplication, filters and company catalogue.",
+        "Explainable matching across requirements, skills, experience, language and location.",
+        "CV Studio and Fact Bank constrain CV tailoring to candidate evidence.",
+        "Application tracking, remote eligibility and local private data.",
+        "Explore companies and sources to find vacancies and review catalogue coverage.",
+        "Compare CV versions and export an application backed by documented facts."
+      ],
+      "nodes": [
+        {
+          "id": "ats",
+          "x": -6,
+          "y": 3,
+          "z": 0,
+          "name": "ATS sources",
+          "detail": "Vacancies from configured portals and applicant tracking systems."
+        },
+        {
+          "id": "ingest",
+          "x": -3,
+          "y": 3,
+          "z": 1,
+          "name": "Node.js ingestion",
+          "detail": "Adapts, cleans and consolidates job listings."
+        },
+        {
+          "id": "catalog",
+          "x": 0,
+          "y": 3,
+          "z": 0,
+          "name": "JSON indexes",
+          "detail": "Publish the catalogue consumed by the client."
+        },
+        {
+          "id": "profile",
+          "x": -4,
+          "y": -2,
+          "z": 1,
+          "name": "Profile and facts",
+          "detail": "IndexedDB stores experience, skills and CV data."
+        },
+        {
+          "id": "match",
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "name": "Explainable fit",
+          "detail": "Compares job requirements with the profile."
+        },
+        {
+          "id": "tailor",
+          "x": 2,
+          "y": -3,
+          "z": 0,
+          "name": "CV tailoring",
+          "detail": "Builds a tailored draft for the vacancy."
+        },
+        {
+          "id": "guard",
+          "x": 5,
+          "y": -3,
+          "z": 1,
+          "name": "Evidence guard",
+          "detail": "Checks the draft against supplied facts."
+        },
+        {
+          "id": "track",
+          "x": 5,
+          "y": 2,
+          "z": 0,
+          "name": "Applications",
+          "detail": "Records and tracks applications."
+        }
+      ],
+      "limit": "Fit scores are heuristics, not hiring probabilities. Source availability depends on permissions and configuration.",
+      "mediaNote": "Actual screenshots from the application built with recovered overlays and a TypeScript typing fix. No fresh job ingestion was run for this demonstration.",
+      "edges": [
+        {
+          "from": "ats",
+          "to": "ingest",
+          "label": "listings"
+        },
+        {
+          "from": "ingest",
+          "to": "catalog",
+          "label": "indexes"
+        },
+        {
+          "from": "catalog",
+          "to": "match",
+          "label": "requirements"
+        },
+        {
+          "from": "profile",
+          "to": "match",
+          "label": "skills"
+        },
+        {
+          "from": "profile",
+          "to": "tailor",
+          "label": "facts"
+        },
+        {
+          "from": "match",
+          "to": "tailor",
+          "label": "target role"
+        },
+        {
+          "from": "tailor",
+          "to": "guard",
+          "label": "draft"
+        },
+        {
+          "from": "profile",
+          "to": "guard",
+          "label": "evidence"
+        },
+        {
+          "from": "catalog",
+          "to": "track",
+          "label": "vacancy"
+        }
+      ],
+      "engineering": [
+        "Node.js adapters in tools/ingestion normalise sources with different contracts, including Greenhouse, Lever and Personio. Ingestion produces static indexes for the Angular client.",
+        "The jobs catalogue and private workspace have different lifecycles. JSON indexes can be regenerated, while local-db.service.ts and storage services manage CVs and applications in the browser.",
+        "matching.service.ts compares requirements with the profile. skill-ontology.service.ts and remote-eligibility.service.ts represent skill equivalents and geographic restrictions on remote roles.",
+        "CV tailoring uses a fact bank and evidence-guard.service.ts to check proposed claims. Separate services handle local generation, comparison, quality checks and export."
+      ]
+    },
+    "mediaNote": "Capturas reales de la aplicación compilada con los overlays recuperados y una corrección de tipos para TypeScript. El catálogo no se ha actualizado mediante ingesta en esta demostración.",
+    "edges": [
+      {
+        "from": "ats",
+        "to": "ingest",
+        "label": "ofertas"
+      },
+      {
+        "from": "ingest",
+        "to": "catalog",
+        "label": "índices"
+      },
+      {
+        "from": "catalog",
+        "to": "match",
+        "label": "requisitos"
+      },
+      {
+        "from": "profile",
+        "to": "match",
+        "label": "competencias"
+      },
+      {
+        "from": "profile",
+        "to": "tailor",
+        "label": "hechos"
+      },
+      {
+        "from": "match",
+        "to": "tailor",
+        "label": "puesto objetivo"
+      },
+      {
+        "from": "tailor",
+        "to": "guard",
+        "label": "borrador"
+      },
+      {
+        "from": "profile",
+        "to": "guard",
+        "label": "evidencia"
+      },
+      {
+        "from": "catalog",
+        "to": "track",
+        "label": "vacante"
+      }
+    ],
+    "engineering": [
+      "Los adaptadores Node.js de tools/ingestion normalizan fuentes con contratos diferentes, entre ellas Greenhouse, Lever y Personio. El proceso de ingesta genera índices estáticos que el cliente Angular consulta desde el catálogo.",
+      "El catálogo de ofertas y el estado privado tienen ciclos de vida distintos. Los índices JSON se pueden regenerar, mientras que local-db.service.ts y los servicios de almacenamiento gestionan en el navegador los CV y el seguimiento de candidaturas.",
+      "matching.service.ts compara requisitos con el perfil. skill-ontology.service.ts y remote-eligibility.service.ts permiten representar equivalencias de competencias y las restricciones geográficas de una oferta remota.",
+      "La adaptación del CV utiliza el banco de hechos y evidence-guard.service.ts para contrastar las afirmaciones propuestas. El proyecto incluye servicios diferenciados de generación local, comparación, control de calidad y exportación."
+    ]
+  },
+  {
+    "id": "business",
+    "title": "BusinessOS Studio",
+    "category": "platform",
+    "version": "1.1",
+    "tag": "Plataforma · CRM sectoriales",
+    "summary": "Una base común para configurar y operar sistemas de gestión adaptados a distintos negocios, con un estudio de configuración, aplicación operativa y portal de cliente.",
+    "features": [
+      "Configuración de verticales, entidades, módulos y marca por tenant.",
+      "CRM, agenda, ventas, inventario, finanzas y dashboards sectoriales.",
+      "Importación CSV con validación y exportación de portabilidad.",
+      "Roles, permisos, MFA, auditoría y control de planes y cuotas.",
+      "Documentos, automatizaciones y webhooks con outbox y reintentos.",
+      "Seguir el estado de una entrega a un sistema externo y recuperar envíos fallidos."
+    ],
+    "stack": [
+      "Python",
+      "FastAPI",
+      "SQLAlchemy",
+      "PostgreSQL / SQLite",
+      "Alembic",
+      "JavaScript",
+      "S3 / MinIO"
+    ],
+    "nodes": [
+      {
+        "name": "Studio + portal",
+        "detail": "Tres superficies separan configuración, operación interna y acceso externo.",
+        "id": "n0",
+        "x": -6,
+        "y": 2,
+        "z": 0
+      },
+      {
+        "name": "API FastAPI",
+        "detail": "Expone módulos de negocio y valida identidad, permisos y ámbitos.",
+        "id": "n1",
+        "x": -3,
+        "y": 2,
+        "z": 1
+      },
+      {
+        "name": "Dominio",
+        "detail": "Entidades, agenda, ventas y finanzas aplican reglas por negocio.",
+        "id": "n2",
+        "x": 0,
+        "y": 2,
+        "z": 1
+      },
+      {
+        "name": "Persistencia",
+        "detail": "SQLAlchemy y migraciones gestionan los datos; documentos usan almacenamiento local o S3.",
+        "id": "n3",
+        "x": 4,
+        "y": 2,
+        "z": 0
+      },
+      {
+        "name": "Workers",
+        "detail": "Outbox e integraciones procesan tareas y registran fallos para su seguimiento.",
+        "id": "n4",
+        "x": 4,
+        "y": -2,
+        "z": 2
+      },
+      {
+        "name": "Roles y alcance",
+        "detail": "RBAC decide qué acciones autoriza el rol y la API acota el acceso al tenant activo.",
+        "id": "n5",
+        "x": -3,
+        "y": -2,
+        "z": 1
+      },
+      {
+        "name": "Eventos de salida",
+        "detail": "Las integraciones registran envíos pendientes para procesarlos fuera de la petición del usuario.",
+        "id": "n6",
+        "x": 0,
+        "y": -2,
+        "z": 0
+      }
+    ],
+    "limit": "La implantación requiere validar infraestructura y configuración. La integración fiscal externa no está habilitada por defecto.",
+    "source": "BusinessOS_Studio_v1.1.0_Commercial_Readiness_FINAL.zip · README.md, app/, worker/, requirements.txt",
+    "images": [
+      "projects/business/business-entry.webp"
+    ],
+    "en": {
+      "tag": "Platform · Sector CRMs",
+      "summary": "A shared foundation for configuring and operating business management systems, with a configuration studio, operational application and customer portal.",
+      "features": [
+        "Tenant-specific verticals, entities, modules and branding.",
+        "CRM, scheduling, sales, inventory, finance and sector dashboards.",
+        "Validated CSV imports and portability exports.",
+        "Roles, permissions, MFA, audit trails, plans and quotas.",
+        "Documents, automations and webhooks with an outbox and retries.",
+        "Track deliveries to external systems and recover failed deliveries."
+      ],
+      "nodes": [
+        {
+          "name": "Studio + portal",
+          "detail": "Three surfaces separate configuration, internal operations and external access.",
+          "id": "n0",
+          "x": -6,
+          "y": 2,
+          "z": 0
+        },
+        {
+          "name": "FastAPI API",
+          "detail": "Business endpoints validate identity, permissions and access scopes.",
+          "id": "n1",
+          "x": -3,
+          "y": 2,
+          "z": 1
+        },
+        {
+          "name": "Domain",
+          "detail": "Entities, scheduling, sales and finance apply business rules.",
+          "id": "n2",
+          "x": 0,
+          "y": 2,
+          "z": 1
+        },
+        {
+          "name": "Persistence",
+          "detail": "SQLAlchemy and migrations manage data; documents use local or S3 storage.",
+          "id": "n3",
+          "x": 4,
+          "y": 2,
+          "z": 0
+        },
+        {
+          "name": "Workers",
+          "detail": "Outbox and integration workers process tasks and record failures.",
+          "id": "n4",
+          "x": 4,
+          "y": -2,
+          "z": 2
+        },
+        {
+          "name": "Roles and scope",
+          "detail": "RBAC determines permitted actions and the API scopes access to the active tenant.",
+          "id": "n5",
+          "x": -3,
+          "y": -2,
+          "z": 1
+        },
+        {
+          "name": "Outbox events",
+          "detail": "Integrations record pending deliveries for processing outside the user request.",
+          "id": "n6",
+          "x": 0,
+          "y": -2,
+          "z": 0
+        }
+      ],
+      "limit": "Deployment requires infrastructure and configuration validation. External tax integration is disabled by default.",
+      "edges": [
+        {
+          "from": "n0",
+          "to": "n1",
+          "label": "request"
+        },
+        {
+          "from": "n1",
+          "to": "n5",
+          "label": "identity and role"
+        },
+        {
+          "from": "n5",
+          "to": "n2",
+          "label": "allowed operation"
+        },
+        {
+          "from": "n2",
+          "to": "n3",
+          "label": "record"
+        },
+        {
+          "from": "n2",
+          "to": "n6",
+          "label": "event"
+        },
+        {
+          "from": "n6",
+          "to": "n4",
+          "label": "pending delivery"
+        },
+        {
+          "from": "n4",
+          "to": "n3",
+          "label": "delivery state"
+        }
+      ],
+      "engineering": [
+        "verticals.py and entity_engine.py separate sector-specific entity configuration from shared rules. One codebase can expose different fields and modules for each business.",
+        "FastAPI exposes operations. security.py and rbac.py centralise authentication and permissions so the admin screens and portal enforce access on the server.",
+        "SQLAlchemy defines persistent records and relationships. The outbox retains delivery state and supports retrying failed webhooks."
+      ],
+      "mediaNote": "BusinessOS CRM sign-in screen."
+    },
+    "edges": [
+      {
+        "from": "n0",
+        "to": "n1",
+        "label": "petición"
+      },
+      {
+        "from": "n1",
+        "to": "n5",
+        "label": "identidad y rol"
+      },
+      {
+        "from": "n5",
+        "to": "n2",
+        "label": "operación permitida"
+      },
+      {
+        "from": "n2",
+        "to": "n3",
+        "label": "registro"
+      },
+      {
+        "from": "n2",
+        "to": "n6",
+        "label": "evento"
+      },
+      {
+        "from": "n6",
+        "to": "n4",
+        "label": "entrega pendiente"
+      },
+      {
+        "from": "n4",
+        "to": "n3",
+        "label": "estado del envío"
+      }
+    ],
+    "engineering": [
+      "verticals.py y entity_engine.py separan la configuración de entidades por sector de las reglas comunes. Una misma base puede presentar campos y módulos distintos según el negocio.",
+      "FastAPI expone las operaciones. security.py y rbac.py concentran autenticación y permisos para que las pantallas administrativas y el portal apliquen controles en servidor.",
+      "SQLAlchemy define registros persistentes y relaciones. El outbox conserva el estado de las entregas y permite reintentar webhooks que hayan fallado."
+    ],
+    "mediaNote": "Acceso al CRM de BusinessOS."
+  },
+  {
+    "id": "aula",
+    "title": "Aula Studio",
+    "category": "platform",
+    "version": "1.0",
+    "tag": "Educación · Gestión editorial",
+    "summary": "Una fábrica de webs educativas para crear, revisar, publicar y mantener sitios de varios centros desde un entorno común.",
+    "features": [
+      "Constructor multipágina por bloques, patrones y temas visuales.",
+      "Roles por centro, revisión, aprobación y staging de publicaciones.",
+      "SEO, formularios, documentos, agenda y módulos de campus.",
+      "Exportación estática y puentes para plataformas CMS.",
+      "Backups verificables, restauración y auditoría de cambios.",
+      "Definir por página la navegación, el título SEO y la composición de bloques."
+    ],
+    "stack": [
+      "Node.js",
+      "JavaScript",
+      "HTML / CSS",
+      "JSON / PostgreSQL",
+      "S3 compatible",
+      "WebGL 360"
+    ],
+    "nodes": [
+      {
+        "name": "Studio",
+        "detail": "Los equipos editan páginas, medios y módulos del centro.",
+        "id": "n0",
+        "x": -6,
+        "y": 2,
+        "z": 0
+      },
+      {
+        "name": "Gobierno editorial",
+        "detail": "Roles y aprobaciones separan edición y publicación.",
+        "id": "n1",
+        "x": -3,
+        "y": 3,
+        "z": 1
+      },
+      {
+        "name": "Staging",
+        "detail": "Una versión de revisión permite comprobar contenido antes de publicar.",
+        "id": "n2",
+        "x": 0,
+        "y": 3,
+        "z": 0
+      },
+      {
+        "name": "Publicación",
+        "detail": "Exportación estática o conexión con CMS según el destino.",
+        "id": "n3",
+        "x": 4,
+        "y": 3,
+        "z": 1
+      },
+      {
+        "name": "Persistencia",
+        "detail": "Adaptadores JSON/PostgreSQL y almacenamiento de medios conservan contenido y versiones.",
+        "id": "n4",
+        "x": -3,
+        "y": -2,
+        "z": 0
+      },
+      {
+        "name": "Modelo de páginas",
+        "detail": "Cada página organiza una ruta, atributos SEO y una lista ordenada de bloques de contenido.",
+        "id": "n5",
+        "x": 1,
+        "y": -2,
+        "z": 0
+      },
+      {
+        "name": "Puente WordPress",
+        "detail": "El adaptador enlaza el modelo de contenido con el destino CMS cuando se configura esa integración.",
+        "id": "n6",
+        "x": 5,
+        "y": -2,
+        "z": 1
+      }
+    ],
+    "limit": "La topología PostgreSQL y object storage requiere validación por despliegue.",
+    "source": "aula-studio-1.0.zip · README.md, package.json, server.js",
+    "images": [
+      "projects/aula/aula-public.webp"
+    ],
+    "en": {
+      "tag": "Education · Editorial management",
+      "summary": "A website factory for creating, reviewing, publishing and maintaining educational sites for multiple schools.",
+      "features": [
+        "Multi-page builder with blocks, patterns and visual themes.",
+        "School-specific roles, reviews, approvals and staging.",
+        "SEO, forms, documents, events and campus modules.",
+        "Static exports and CMS platform bridges.",
+        "Verifiable backups, restoration and change auditing.",
+        "Set navigation, SEO title and block composition for each page."
+      ],
+      "nodes": [
+        {
+          "name": "Studio",
+          "detail": "Teams edit school pages, media and modules.",
+          "id": "n0",
+          "x": -6,
+          "y": 2,
+          "z": 0
+        },
+        {
+          "name": "Editorial governance",
+          "detail": "Roles and approvals separate editing from publishing.",
+          "id": "n1",
+          "x": -3,
+          "y": 3,
+          "z": 1
+        },
+        {
+          "name": "Staging",
+          "detail": "A review version supports content checks before publication.",
+          "id": "n2",
+          "x": 0,
+          "y": 3,
+          "z": 0
+        },
+        {
+          "name": "Publishing",
+          "detail": "Static export or CMS integration is selected for the destination.",
+          "id": "n3",
+          "x": 4,
+          "y": 3,
+          "z": 1
+        },
+        {
+          "name": "Persistence",
+          "detail": "JSON/PostgreSQL adapters and media storage retain content and versions.",
+          "id": "n4",
+          "x": -3,
+          "y": -2,
+          "z": 0
+        },
+        {
+          "name": "Page model",
+          "detail": "Each page holds a route, SEO attributes and an ordered list of content blocks.",
+          "id": "n5",
+          "x": 1,
+          "y": -2,
+          "z": 0
+        },
+        {
+          "name": "WordPress bridge",
+          "detail": "The adapter connects the content model to the CMS target when this integration is configured.",
+          "id": "n6",
+          "x": 5,
+          "y": -2,
+          "z": 1
+        }
+      ],
+      "limit": "The PostgreSQL and object-storage topology needs deployment-specific validation.",
+      "edges": [
+        {
+          "from": "n0",
+          "to": "n5",
+          "label": "edits blocks"
+        },
+        {
+          "from": "n5",
+          "to": "n4",
+          "label": "saves draft"
+        },
+        {
+          "from": "n5",
+          "to": "n1",
+          "label": "editorial change"
+        },
+        {
+          "from": "n1",
+          "to": "n2",
+          "label": "approved version"
+        },
+        {
+          "from": "n2",
+          "to": "n3",
+          "label": "publishes site"
+        },
+        {
+          "from": "n3",
+          "to": "n6",
+          "label": "CMS target"
+        }
+      ],
+      "engineering": [
+        "page-model.js normalises routes and limits supported block types. Structured content allows pages to be rearranged without editing HTML templates.",
+        "render.js converts the editorial model into public pages. Separate draft, staging and publishing stages allow the result to be inspected before it is made public.",
+        "persistence.js and object-storage.js separate editorial data and files. backup.js manages copies used to recover school state."
+      ],
+      "mediaNote": "Colegio Horizonte website generated by Aula Studio with its sample content."
+    },
+    "edges": [
+      {
+        "from": "n0",
+        "to": "n5",
+        "label": "edita bloques"
+      },
+      {
+        "from": "n5",
+        "to": "n4",
+        "label": "guarda borrador"
+      },
+      {
+        "from": "n5",
+        "to": "n1",
+        "label": "cambio editorial"
+      },
+      {
+        "from": "n1",
+        "to": "n2",
+        "label": "versión aprobada"
+      },
+      {
+        "from": "n2",
+        "to": "n3",
+        "label": "publica sitio"
+      },
+      {
+        "from": "n3",
+        "to": "n6",
+        "label": "destino CMS"
+      }
+    ],
+    "engineering": [
+      "page-model.js normaliza rutas y limita los tipos de bloque admitidos. El contenido estructurado permite reordenar páginas sin editar plantillas HTML.",
+      "render.js convierte el modelo editorial en páginas públicas. La separación entre borrador, staging y publicación permite inspeccionar el resultado antes de hacerlo visible.",
+      "persistence.js y object-storage.js separan datos editoriales y ficheros. backup.js gestiona copias para recuperar el estado del centro."
+    ],
+    "mediaNote": "Sitio de Colegio Horizonte, generado por Aula Studio con los datos de ejemplo."
+  },
+  {
+    "id": "wealth",
+    "title": "WealthPilot",
+    "category": "finance",
+    "version": "1.0.9",
+    "tag": "Finanzas · Simulación personal",
+    "summary": "Un panel para reunir patrimonio, liquidez, inversión, vivienda y objetivos, con motores de cálculo y ayuda contextual para explorar decisiones financieras.",
+    "features": [
+      "Patrimonio, movimientos, cartera y seguimiento histórico.",
+      "Simuladores de hipoteca, vivienda, deuda y jubilación.",
+      "Escenarios de estrés y planificación de objetivos.",
+      "Importaciones y bóveda local de datos con funciones de protección.",
+      "IA local opcional y panel de fuentes externas y widgets.",
+      "Consultar movimientos y posiciones de cartera junto a la evolución del patrimonio."
+    ],
+    "stack": [
+      "Angular",
+      "TypeScript",
+      "Capacitor",
+      "SQLite",
+      "WebAssembly / wllama",
+      "Motores de cálculo"
+    ],
+    "nodes": [
+      {
+        "name": "Datos personales",
+        "detail": "Introducción o importación de movimientos, activos y objetivos.",
+        "id": "n0",
+        "x": -6,
+        "y": 2,
+        "z": 0
+      },
+      {
+        "name": "Bóveda local",
+        "detail": "El almacenamiento local organiza y protege la información financiera.",
+        "id": "n1",
+        "x": -3,
+        "y": 2,
+        "z": 0
+      },
+      {
+        "name": "Motores",
+        "detail": "Servicios específicos calculan liquidez, deuda, vivienda y jubilación.",
+        "id": "n2",
+        "x": 0,
+        "y": 2,
+        "z": 1
+      },
+      {
+        "name": "Escenarios",
+        "detail": "Se comparan hipótesis de planificación y estrés.",
+        "id": "n3",
+        "x": 2,
+        "y": -2,
+        "z": 1
+      },
+      {
+        "name": "Panel + ayuda",
+        "detail": "La interfaz muestra resultados, procedencia y ayuda contextual; la IA es opcional.",
+        "id": "n4",
+        "x": 6,
+        "y": 1,
+        "z": 0
+      },
+      {
+        "name": "Libro de cartera",
+        "detail": "El ledger organiza las operaciones de instrumentos y alimenta la lectura de posiciones.",
+        "id": "n5",
+        "x": -3,
+        "y": -3,
+        "z": 0
+      },
+      {
+        "name": "Fuentes externas",
+        "detail": "Servicios de mercado e información externa aportan contexto según disponibilidad del proveedor.",
+        "id": "n6",
+        "x": 5,
+        "y": 4,
+        "z": 2
+      }
+    ],
+    "limit": "Simulaciones basadas en hipótesis. Las integraciones externas dependen del proveedor.",
+    "source": "wealthpilot-v1.0.9.zip · package.json, src/app/core/*engine.service.ts, src/app/pages",
+    "images": [
+      "projects/wealth/wealth-demo.webp"
+    ],
+    "en": {
+      "tag": "Finance · Personal simulation",
+      "summary": "A workspace for net worth, liquidity, investment, housing and goals, with calculation engines and contextual guidance for exploring financial decisions.",
+      "features": [
+        "Net worth, transactions, portfolio and historical tracking.",
+        "Mortgage, housing, debt and retirement simulators.",
+        "Stress scenarios and goal planning.",
+        "Imports and a local data vault with protection features.",
+        "Optional local AI and external source/widget panels.",
+        "Inspect transactions and portfolio holdings alongside net-worth history."
+      ],
+      "nodes": [
+        {
+          "name": "Personal data",
+          "detail": "Transactions, assets and goals are entered or imported.",
+          "id": "n0",
+          "x": -6,
+          "y": 2,
+          "z": 0
+        },
+        {
+          "name": "Local vault",
+          "detail": "Local storage organises and protects financial information.",
+          "id": "n1",
+          "x": -3,
+          "y": 2,
+          "z": 0
+        },
+        {
+          "name": "Engines",
+          "detail": "Specialised services calculate liquidity, debt, housing and retirement.",
+          "id": "n2",
+          "x": 0,
+          "y": 2,
+          "z": 1
+        },
+        {
+          "name": "Scenarios",
+          "detail": "Planning and stress assumptions can be compared.",
+          "id": "n3",
+          "x": 2,
+          "y": -2,
+          "z": 1
+        },
+        {
+          "name": "Dashboard + help",
+          "detail": "The interface presents results, provenance and contextual help; AI is optional.",
+          "id": "n4",
+          "x": 6,
+          "y": 1,
+          "z": 0
+        },
+        {
+          "name": "Portfolio ledger",
+          "detail": "The ledger organises instrument transactions used to interpret holdings.",
+          "id": "n5",
+          "x": -3,
+          "y": -3,
+          "z": 0
+        },
+        {
+          "name": "External sources",
+          "detail": "Market and external insight services supply context according to provider availability.",
+          "id": "n6",
+          "x": 5,
+          "y": 4,
+          "z": 2
+        }
+      ],
+      "limit": "Simulations depend on assumptions. External integrations depend on their providers.",
+      "edges": [
+        {
+          "from": "n0",
+          "to": "n1",
+          "label": "import"
+        },
+        {
+          "from": "n1",
+          "to": "n2",
+          "label": "household data"
+        },
+        {
+          "from": "n1",
+          "to": "n5",
+          "label": "transactions"
+        },
+        {
+          "from": "n5",
+          "to": "n2",
+          "label": "holdings"
+        },
+        {
+          "from": "n2",
+          "to": "n3",
+          "label": "assumptions"
+        },
+        {
+          "from": "n2",
+          "to": "n4",
+          "label": "indicators"
+        },
+        {
+          "from": "n3",
+          "to": "n4",
+          "label": "results"
+        },
+        {
+          "from": "n6",
+          "to": "n4",
+          "label": "external context"
+        }
+      ],
+      "engineering": [
+        "import-engine.service.ts transforms inputs into application records and local-data-vault.service.ts manages the vault. Imported data can feed multiple calculations.",
+        "Cash-flow, liquidity, debt and retirement engines are independent services. Planning assumptions can be varied and their effects compared across Angular views.",
+        "portfolio-ledger.service.ts handles transactions, while provenance.service.ts and external-insights.service.ts provide provenance and external context for the dashboard."
+      ],
+      "mediaNote": "WealthPilot dashboard with the built-in demo scenario."
+    },
+    "edges": [
+      {
+        "from": "n0",
+        "to": "n1",
+        "label": "importación"
+      },
+      {
+        "from": "n1",
+        "to": "n2",
+        "label": "datos del hogar"
+      },
+      {
+        "from": "n1",
+        "to": "n5",
+        "label": "operaciones"
+      },
+      {
+        "from": "n5",
+        "to": "n2",
+        "label": "posiciones"
+      },
+      {
+        "from": "n2",
+        "to": "n3",
+        "label": "hipótesis"
+      },
+      {
+        "from": "n2",
+        "to": "n4",
+        "label": "indicadores"
+      },
+      {
+        "from": "n3",
+        "to": "n4",
+        "label": "resultados"
+      },
+      {
+        "from": "n6",
+        "to": "n4",
+        "label": "contexto externo"
+      }
+    ],
+    "engineering": [
+      "import-engine.service.ts transforma entradas en registros de la aplicación y local-data-vault.service.ts gestiona la bóveda. La información importada puede alimentar varios cálculos.",
+      "Los motores de flujo de caja, liquidez, deuda y jubilación son servicios independientes. Esto permite cambiar hipótesis de planificación y comparar su efecto en distintas vistas Angular.",
+      "portfolio-ledger.service.ts trata operaciones, mientras provenance.service.ts y external-insights.service.ts aportan procedencia y contexto externo a la lectura del panel."
+    ],
+    "mediaNote": "Panel de WealthPilot con el escenario de demostración."
+  },
+  {
+    "id": "atlas",
+    "title": "ATLAS",
+    "category": "finance",
+    "version": "Cloud 0.2",
+    "tag": "Mercados · Paper trading",
+    "summary": "Un laboratorio de estrategias y seguimiento de carteras ficticias de criptoactivos, con una variante cloud basada en Workers y D1.",
+    "features": [
+      "Seguimiento de carteras de simulación y operaciones.",
+      "Datos de mercado de Kraken y pares configurados.",
+      "Panel de estrategia, rendimiento y backtesting.",
+      "Persistencia cloud con migraciones D1.",
+      "Pruebas de lógica de negocio en Node.js.",
+      "Actualizar las carteras mediante ejecución periódica del Worker aunque el dashboard esté cerrado."
+    ],
+    "stack": [
+      "JavaScript",
+      "Cloudflare Workers",
+      "D1 / SQLite",
+      "Kraken API",
+      "Wrangler"
+    ],
+    "nodes": [
+      {
+        "name": "Kraken",
+        "detail": "La fuente de mercado proporciona datos para los pares configurados.",
+        "id": "n0",
+        "x": -6,
+        "y": 2,
+        "z": 2
+      },
+      {
+        "name": "Worker",
+        "detail": "La lógica de aplicación recibe peticiones y ejecuta las operaciones soportadas.",
+        "id": "n1",
+        "x": -2,
+        "y": 2,
+        "z": 1
+      },
+      {
+        "name": "Estrategia",
+        "detail": "Las reglas evalúan señales y simulan decisiones.",
+        "id": "n2",
+        "x": 1,
+        "y": 3,
+        "z": 1
+      },
+      {
+        "name": "D1",
+        "detail": "La base de datos conserva carteras e historial.",
+        "id": "n3",
+        "x": 4,
+        "y": 0,
+        "z": 0
+      },
+      {
+        "name": "Dashboard",
+        "detail": "El panel presenta rendimiento y análisis de las simulaciones.",
+        "id": "n4",
+        "x": 1,
+        "y": -3,
+        "z": 0
+      },
+      {
+        "name": "Cron",
+        "detail": "El disparador periódico invoca el Worker para actualizar la simulación sin una pestaña abierta.",
+        "id": "n5",
+        "x": -2,
+        "y": -2,
+        "z": 1
+      },
+      {
+        "name": "Backtest",
+        "detail": "Evalúa una estrategia sobre velas históricas y resume el comportamiento de las operaciones simuladas.",
+        "id": "n6",
+        "x": 5,
+        "y": 4,
+        "z": 1
+      }
+    ],
+    "limit": "Paper trading: no implica rentabilidad futura ni ejecución real de órdenes. Las imágenes son previews incluidas en la entrega.",
+    "source": "ATLAS_Cloud_v0.2_PROYECTO_COMPLETO.zip · package.json y fuentes de atlas-cloud/",
+    "images": [
+      "projects/atlas/dashboard.webp",
+      "projects/atlas/backtest.webp"
+    ],
+    "en": {
+      "tag": "Markets · Paper trading",
+      "summary": "A laboratory for strategies and simulated cryptocurrency portfolios, with a cloud variant built on Workers and D1.",
+      "features": [
+        "Simulated portfolio and trade tracking.",
+        "Kraken market data for configured pairs.",
+        "Strategy, performance and backtesting dashboard.",
+        "Cloud persistence with D1 migrations.",
+        "Business logic tests in Node.js.",
+        "Update portfolios on a Worker schedule while the dashboard is closed."
+      ],
+      "nodes": [
+        {
+          "name": "Kraken",
+          "detail": "The market source provides data for configured pairs.",
+          "id": "n0",
+          "x": -6,
+          "y": 2,
+          "z": 2
+        },
+        {
+          "name": "Worker",
+          "detail": "Application logic handles requests and supported operations.",
+          "id": "n1",
+          "x": -2,
+          "y": 2,
+          "z": 1
+        },
+        {
+          "name": "Strategy",
+          "detail": "Rules evaluate signals and simulate decisions.",
+          "id": "n2",
+          "x": 1,
+          "y": 3,
+          "z": 1
+        },
+        {
+          "name": "D1",
+          "detail": "The database stores portfolios and history.",
+          "id": "n3",
+          "x": 4,
+          "y": 0,
+          "z": 0
+        },
+        {
+          "name": "Dashboard",
+          "detail": "The dashboard presents performance and simulation analysis.",
+          "id": "n4",
+          "x": 1,
+          "y": -3,
+          "z": 0
+        },
+        {
+          "name": "Cron trigger",
+          "detail": "A periodic trigger invokes the Worker to update the simulation without an open tab.",
+          "id": "n5",
+          "x": -2,
+          "y": -2,
+          "z": 1
+        },
+        {
+          "name": "Backtest",
+          "detail": "Evaluates a strategy on historical candles and summarises simulated trading behaviour.",
+          "id": "n6",
+          "x": 5,
+          "y": 4,
+          "z": 1
+        }
+      ],
+      "limit": "Paper trading does not imply future returns or live order execution. Images are previews included in the delivery.",
+      "edges": [
+        {
+          "from": "n5",
+          "to": "n1",
+          "label": "scheduled run"
+        },
+        {
+          "from": "n0",
+          "to": "n1",
+          "label": "candles"
+        },
+        {
+          "from": "n1",
+          "to": "n2",
+          "label": "market data"
+        },
+        {
+          "from": "n2",
+          "to": "n3",
+          "label": "simulated trade"
+        },
+        {
+          "from": "n1",
+          "to": "n6",
+          "label": "history"
+        },
+        {
+          "from": "n4",
+          "to": "n1",
+          "label": "query / plan"
+        },
+        {
+          "from": "n3",
+          "to": "n1",
+          "label": "portfolio and log"
+        },
+        {
+          "from": "n6",
+          "to": "n4",
+          "label": "metrics"
+        }
+      ],
+      "engineering": [
+        "worker.js contains HTTP routes and scheduled execution. The deployment cron periodically invokes simulation logic independently of the browser.",
+        "The DB binding connects Cloudflare Workers to D1. Version 0.2 reuses the 0.1 schema and retains existing portfolios.",
+        "Kraken supplies prices and decisions are recorded in paper portfolios. The dashboard presents performance and historical results from this simulation."
+      ]
+    },
+    "edges": [
+      {
+        "from": "n5",
+        "to": "n1",
+        "label": "ejecución periódica"
+      },
+      {
+        "from": "n0",
+        "to": "n1",
+        "label": "velas"
+      },
+      {
+        "from": "n1",
+        "to": "n2",
+        "label": "datos de mercado"
+      },
+      {
+        "from": "n2",
+        "to": "n3",
+        "label": "operación simulada"
+      },
+      {
+        "from": "n1",
+        "to": "n6",
+        "label": "histórico"
+      },
+      {
+        "from": "n4",
+        "to": "n1",
+        "label": "consulta / plan"
+      },
+      {
+        "from": "n3",
+        "to": "n1",
+        "label": "cartera e historial"
+      },
+      {
+        "from": "n6",
+        "to": "n4",
+        "label": "métricas"
+      }
+    ],
+    "engineering": [
+      "worker.js contiene las rutas HTTP y la ejecución programada. El cron del despliegue llama periódicamente a la lógica de simulación sin depender del navegador.",
+      "El binding DB conecta Cloudflare Workers con D1. La actualización 0.2 reutiliza el esquema 0.1 y conserva las carteras existentes.",
+      "Los precios proceden de Kraken y las decisiones se registran en carteras ficticias. El dashboard presenta rendimiento y resultados históricos sobre esa simulación."
+    ]
+  },
+  {
+    "id": "video",
+    "title": "Video Studio",
+    "category": "creative",
+    "version": "0.11.19 + overlay 0.11.21",
+    "tag": "Creación · Pipeline audiovisual",
+    "summary": "Un estudio local para convertir una idea en un vídeo mediante investigación, guion, selección visual, narración y montaje reproducible.",
+    "features": [
+      "Proyectos, escenas, formatos y variantes de contenido.",
+      "Selección de medios reales, IA o combinaciones según la configuración.",
+      "Narración por idioma y subtítulos sincronizados.",
+      "Montaje, música y exportación con FFmpeg.",
+      "Regeneración por etapas y almacenamiento de proyectos locales.",
+      "Conservar una variante por idioma y revisar sus escenas antes de lanzar el render."
+    ],
+    "stack": [
+      "Node.js",
+      "JavaScript",
+      "FFmpeg / FFprobe",
+      "Piper / Edge TTS",
+      "ComfyUI opcional",
+      "JSON"
+    ],
+    "nodes": [
+      {
+        "name": "Idea + guion",
+        "detail": "La aplicación estructura el contenido y las escenas del proyecto.",
+        "id": "n0",
+        "x": -6,
+        "y": 1,
+        "z": 0
+      },
+      {
+        "name": "Dirección visual",
+        "detail": "Selecciona medios y proveedores conforme a la intención de cada escena.",
+        "id": "n1",
+        "x": -3,
+        "y": 4,
+        "z": 1
+      },
+      {
+        "name": "Voz",
+        "detail": "Genera narración, mide duración y prepara cues de subtítulos.",
+        "id": "n2",
+        "x": -3,
+        "y": -2,
+        "z": 0
+      },
+      {
+        "name": "FFmpeg",
+        "detail": "Compone imágenes, clips, narración, música y textos.",
+        "id": "n3",
+        "x": 2,
+        "y": 1,
+        "z": 1
+      },
+      {
+        "name": "Proyecto + export",
+        "detail": "Conserva recursos y configuración junto al vídeo exportado.",
+        "id": "n4",
+        "x": 6,
+        "y": 1,
+        "z": 0
+      },
+      {
+        "name": "Subtítulos",
+        "detail": "Los tiempos de la locución se usan para situar los subtítulos de cada escena.",
+        "id": "n5",
+        "x": 0,
+        "y": -4,
+        "z": 0
+      },
+      {
+        "name": "Medios de escena",
+        "detail": "La selección visual asigna recursos reales o generados a la intención de cada escena.",
+        "id": "n6",
+        "x": 0,
+        "y": 4,
+        "z": 2
+      }
+    ],
+    "limit": "La relevancia de imágenes y los resultados dependen de proveedores y configuración; requieren revisión editorial.",
+    "source": "Video-Studio-Local-v0.11.19.zip + VideoStudio_OVERLAY_0_11_21_DESCARGA.zip · ARQUITECTURA.md y server/",
+    "images": [
+      "projects/video/video-studio.webp"
+    ],
+    "en": {
+      "tag": "Creative tools · Video pipeline",
+      "summary": "A local studio for turning an idea into a video through research, scripting, visual selection, narration and reproducible editing.",
+      "features": [
+        "Projects, scenes, formats and content variants.",
+        "Real media, AI or mixed visual selection according to configuration.",
+        "Language-specific narration and synchronised captions.",
+        "Editing, music and export with FFmpeg.",
+        "Stage-specific regeneration and local project storage.",
+        "Keep a language variant and review its scenes before starting a render."
+      ],
+      "nodes": [
+        {
+          "name": "Idea + script",
+          "detail": "The application structures project content and scenes.",
+          "id": "n0",
+          "x": -6,
+          "y": 1,
+          "z": 0
+        },
+        {
+          "name": "Visual direction",
+          "detail": "Media and providers are selected according to each scene’s intent.",
+          "id": "n1",
+          "x": -3,
+          "y": 4,
+          "z": 1
+        },
+        {
+          "name": "Voice",
+          "detail": "Narration is generated, measured and prepared for timed captions.",
+          "id": "n2",
+          "x": -3,
+          "y": -2,
+          "z": 0
+        },
+        {
+          "name": "FFmpeg",
+          "detail": "Images, clips, narration, music and text are composed.",
+          "id": "n3",
+          "x": 2,
+          "y": 1,
+          "z": 1
+        },
+        {
+          "name": "Project + export",
+          "detail": "Assets and configuration are retained alongside the exported video.",
+          "id": "n4",
+          "x": 6,
+          "y": 1,
+          "z": 0
+        },
+        {
+          "name": "Subtitles",
+          "detail": "Narration timings are used to place captions for each scene.",
+          "id": "n5",
+          "x": 0,
+          "y": -4,
+          "z": 0
+        },
+        {
+          "name": "Scene media",
+          "detail": "Visual selection assigns real or generated assets to the intention of each scene.",
+          "id": "n6",
+          "x": 0,
+          "y": 4,
+          "z": 2
+        }
+      ],
+      "limit": "Image relevance and results depend on providers and configuration and require editorial review.",
+      "edges": [
+        {
+          "from": "n0",
+          "to": "n1",
+          "label": "script and scenes"
+        },
+        {
+          "from": "n0",
+          "to": "n2",
+          "label": "text by language"
+        },
+        {
+          "from": "n1",
+          "to": "n6",
+          "label": "visual intent"
+        },
+        {
+          "from": "n6",
+          "to": "n3",
+          "label": "clips and images"
+        },
+        {
+          "from": "n2",
+          "to": "n5",
+          "label": "timings"
+        },
+        {
+          "from": "n2",
+          "to": "n3",
+          "label": "narration"
+        },
+        {
+          "from": "n5",
+          "to": "n3",
+          "label": "subtitles"
+        },
+        {
+          "from": "n3",
+          "to": "n4",
+          "label": "rendered video"
+        }
+      ],
+      "engineering": [
+        "server/pipeline.mjs organises stages around the project and its scenes. Separating script, media and voice allows one stage to be regenerated while preserving other editorial choices.",
+        "server/visual-director.mjs applies visual direction to each scene. The choice of real or generated material depends on mode and available providers.",
+        "The narration track supplies timing for editing. FFmpeg combines clips, images, text, music and voice using the saved project assets."
+      ],
+      "mediaNote": "Video Studio editor running locally."
+    },
+    "edges": [
+      {
+        "from": "n0",
+        "to": "n1",
+        "label": "guion y escenas"
+      },
+      {
+        "from": "n0",
+        "to": "n2",
+        "label": "texto por idioma"
+      },
+      {
+        "from": "n1",
+        "to": "n6",
+        "label": "intención visual"
+      },
+      {
+        "from": "n6",
+        "to": "n3",
+        "label": "clips e imágenes"
+      },
+      {
+        "from": "n2",
+        "to": "n5",
+        "label": "tiempos"
+      },
+      {
+        "from": "n2",
+        "to": "n3",
+        "label": "locución"
+      },
+      {
+        "from": "n5",
+        "to": "n3",
+        "label": "subtítulos"
+      },
+      {
+        "from": "n3",
+        "to": "n4",
+        "label": "vídeo renderizado"
+      }
+    ],
+    "engineering": [
+      "server/pipeline.mjs organiza etapas a partir del proyecto y sus escenas. Separar guion, medios y locución permite regenerar una etapa conservando decisiones editoriales de las demás.",
+      "server/visual-director.mjs aplica dirección visual a cada escena. La elección entre material real y generado depende del modo y de los proveedores disponibles.",
+      "La pista de narración determina duraciones para el montaje. FFmpeg reúne clips, imágenes, textos, música y voz en una salida reproducible a partir de los recursos guardados."
+    ],
+    "mediaNote": "Editor de Video Studio ejecutado localmente."
+  },
+  {
+    "id": "natalia",
+    "title": "Natalia Blanco",
+    "category": "creative",
+    "version": "v4 recuperada",
+    "tag": "Web de artista · Experiencia interactiva",
+    "summary": "Una web musical con fotografías y portadas reales que combina presentación artística, discografía y pequeños descubrimientos interactivos.",
+    "features": [
+      "Discografía con portadas y fotografías optimizadas.",
+      "Experiencias musicales con Web Audio y elementos Three.js.",
+      "Estrellas coleccionables y archivo secreto.",
+      "Minijuegos de constelaciones y alquimia.",
+      "Formularios preparados para Netlify Forms y diseño adaptable.",
+      "Abrir el archivo con el atajo NB después de completar las cinco estrellas."
+    ],
+    "stack": [
+      "HTML / CSS",
+      "JavaScript",
+      "Three.js",
+      "Web Audio",
+      "WebP",
+      "localStorage"
+    ],
+    "nodes": [
+      {
+        "name": "Contenido",
+        "detail": "Fotografías, portadas y textos dan identidad al sitio.",
+        "id": "n0",
+        "x": -6,
+        "y": 3,
+        "z": 0
+      },
+      {
+        "name": "Interfaz",
+        "detail": "Secciones responsivas conectan música, artista y colaboración.",
+        "id": "n1",
+        "x": -2,
+        "y": 3,
+        "z": 0
+      },
+      {
+        "name": "Interacciones",
+        "detail": "Coleccionables y minijuegos convierten la navegación en exploración.",
+        "id": "n2",
+        "x": 1,
+        "y": 1,
+        "z": 0
+      },
+      {
+        "name": "Audio + 3D",
+        "detail": "Web Audio y Three.js aportan experiencias visuales y sonoras.",
+        "id": "n3",
+        "x": 4,
+        "y": 3,
+        "z": 1
+      },
+      {
+        "name": "Estado local",
+        "detail": "El navegador conserva el progreso; los formularios requieren un destino configurado.",
+        "id": "n4",
+        "x": 1,
+        "y": -3,
+        "z": 0
+      },
+      {
+        "name": "Estrellas ocultas",
+        "detail": "Cinco fragmentos repartidos por la web registran el progreso de exploración.",
+        "id": "n5",
+        "x": -3,
+        "y": -2,
+        "z": 0
+      },
+      {
+        "name": "Archivo secreto",
+        "detail": "Al reunir los fragmentos se abren Orión, el laboratorio alquímico y el hechizo sonoro.",
+        "id": "n6",
+        "x": 5,
+        "y": -2,
+        "z": 1
+      }
+    ],
+    "limit": "La versión materializada es la v4; las mejoras v5/v6 mencionadas en el historial no están en este ZIP.",
+    "source": "Natalia_Blanco_Artist_Web_v4.zip · README.md, app.js, styles.css, assets/media/",
+    "images": [
+      "projects/natalia/site.webp",
+      "projects/natalia/natalia-alquimia-portrait.webp",
+      "projects/natalia/alquimia-del-ser.webp"
+    ],
+    "mediaNote": "Captura real de la web v4 ejecutada en esta revisión, seguida de fotografía y portada usadas en el proyecto. WebGL no estaba disponible en el navegador de pruebas.",
+    "en": {
+      "tag": "Artist website · Interactive experience",
+      "summary": "A music website with real photographs and cover art, combining artist presentation, discography and small interactive discoveries.",
+      "features": [
+        "Discography with optimised covers and photographs.",
+        "Musical experiences using Web Audio and Three.js elements.",
+        "Collectible stars and a secret archive.",
+        "Constellation and alchemy minigames.",
+        "Netlify Forms-ready forms and responsive design.",
+        "Reopen the archive with the NB shortcut after collecting all five stars."
+      ],
+      "nodes": [
+        {
+          "name": "Content",
+          "detail": "Photographs, cover artwork and copy define the site’s identity.",
+          "id": "n0",
+          "x": -6,
+          "y": 3,
+          "z": 0
+        },
+        {
+          "name": "Interface",
+          "detail": "Responsive sections connect music, artist and collaboration.",
+          "id": "n1",
+          "x": -2,
+          "y": 3,
+          "z": 0
+        },
+        {
+          "name": "Interactions",
+          "detail": "Collectibles and minigames turn navigation into exploration.",
+          "id": "n2",
+          "x": 1,
+          "y": 1,
+          "z": 0
+        },
+        {
+          "name": "Audio + 3D",
+          "detail": "Web Audio and Three.js provide visual and sound experiences.",
+          "id": "n3",
+          "x": 4,
+          "y": 3,
+          "z": 1
+        },
+        {
+          "name": "Local state",
+          "detail": "The browser retains progress; forms need a configured destination.",
+          "id": "n4",
+          "x": 1,
+          "y": -3,
+          "z": 0
+        },
+        {
+          "name": "Hidden stars",
+          "detail": "Five fragments across the site track exploration progress.",
+          "id": "n5",
+          "x": -3,
+          "y": -2,
+          "z": 0
+        },
+        {
+          "name": "Secret archive",
+          "detail": "Completing the collection unlocks Orion, the alchemy laboratory and the sound spell.",
+          "id": "n6",
+          "x": 5,
+          "y": -2,
+          "z": 1
+        }
+      ],
+      "limit": "The recovered version is v4; the v5/v6 changes mentioned in history are not in this ZIP.",
+      "mediaNote": "Actual website v4 screenshot captured during this review, followed by project photographs and cover artwork. WebGL was unavailable in the test browser.",
+      "edges": [
+        {
+          "from": "n0",
+          "to": "n1",
+          "label": "catalogue and photos"
+        },
+        {
+          "from": "n1",
+          "to": "n2",
+          "label": "visitor gesture"
+        },
+        {
+          "from": "n1",
+          "to": "n5",
+          "label": "discovery"
+        },
+        {
+          "from": "n5",
+          "to": "n4",
+          "label": "saves fragment"
+        },
+        {
+          "from": "n4",
+          "to": "n6",
+          "label": "full collection"
+        },
+        {
+          "from": "n6",
+          "to": "n2",
+          "label": "select experience"
+        },
+        {
+          "from": "n2",
+          "to": "n3",
+          "label": "notes and animation"
+        }
+      ],
+      "engineering": [
+        "The static release keeps content in index.html, responsive presentation in styles.css and events in app.js. Discography and images ship alongside the site.",
+        "The five fragments are retained in localStorage. Restoring state on a later visit can keep the secret archive unlocked in that browser.",
+        "The sound spell synthesises four musical crystals with Web Audio in real time. The interface adapts motion to the visitor’s reduced-motion preference."
+      ]
+    },
+    "edges": [
+      {
+        "from": "n0",
+        "to": "n1",
+        "label": "catálogo y fotos"
+      },
+      {
+        "from": "n1",
+        "to": "n2",
+        "label": "gesto del visitante"
+      },
+      {
+        "from": "n1",
+        "to": "n5",
+        "label": "descubrimiento"
+      },
+      {
+        "from": "n5",
+        "to": "n4",
+        "label": "guarda fragmento"
+      },
+      {
+        "from": "n4",
+        "to": "n6",
+        "label": "colección completa"
+      },
+      {
+        "from": "n6",
+        "to": "n2",
+        "label": "elige experiencia"
+      },
+      {
+        "from": "n2",
+        "to": "n3",
+        "label": "notas y animación"
+      }
+    ],
+    "engineering": [
+      "La entrega estática concentra el contenido en index.html, la presentación adaptable en styles.css y los eventos en app.js. La discografía y las imágenes se sirven junto con la web.",
+      "Los cinco fragmentos se conservan en localStorage. Al reconstruir el estado en otra visita, el archivo secreto puede permanecer desbloqueado en ese navegador.",
+      "El hechizo sonoro sintetiza cuatro cristales musicales con Web Audio en tiempo real. La interfaz adapta el movimiento a la preferencia de movimiento reducido del visitante."
+    ]
+  },
+  {
+    "id": "biblio",
+    "title": "Biblioverse",
+    "category": "creative",
+    "version": "38",
+    "tag": "Videojuego · Mundos 3D",
+    "summary": "Un videojuego de acción inspirado en universos literarios, con escenarios Three.js, personajes, habilidades y progresión. Separa navegación, colisiones y decoración para mantener coherencia entre lo que se ve y lo que se puede recorrer.",
+    "features": [
+      "18 mapas y 16 héroes con apariencias y habilidades.",
+      "Modos visuales 3D y pixelart sobre escenarios tridimensionales.",
+      "Enemigos, jefes y sistemas de progresión.",
+      "Arquitectura específica por localización anclada a obstáculos con colisiones.",
+      "Geometría instanciada y opciones de calidad para controlar el coste de renderizado.",
+      "Ajustar la densidad de arquitectura y decoración por sector mediante los perfiles de calidad."
+    ],
+    "stack": [
+      "JavaScript",
+      "Three.js",
+      "Vite",
+      "WebGL",
+      "Sprites PNG",
+      "Node.js tests"
+    ],
+    "nodes": [
+      {
+        "name": "Entrada",
+        "detail": "Los controles recogen movimiento y acciones del jugador.",
+        "id": "n0",
+        "x": -6,
+        "y": 2,
+        "z": 0
+      },
+      {
+        "name": "Simulación",
+        "detail": "Los sistemas actualizan combate, habilidades y progresión.",
+        "id": "n1",
+        "x": -2,
+        "y": 2,
+        "z": 0
+      },
+      {
+        "name": "Navegación",
+        "detail": "MapNavigation define obstáculos y recorridos válidos.",
+        "id": "n2",
+        "x": -2,
+        "y": -2,
+        "z": 0
+      },
+      {
+        "name": "Escenario",
+        "detail": "La decoración se coloca sobre obstáculos existentes y comparte geometrías.",
+        "id": "n3",
+        "x": 2,
+        "y": -2,
+        "z": 1
+      },
+      {
+        "name": "Render Three.js",
+        "detail": "La cámara, personajes y escenario se representan con el modo visual seleccionado.",
+        "id": "n4",
+        "x": 5,
+        "y": 1,
+        "z": 2
+      },
+      {
+        "name": "Catálogo de mapas",
+        "detail": "Cada localización aporta obstáculos, identidad visual y reglas para colocar arquitectura.",
+        "id": "n5",
+        "x": -6,
+        "y": -2,
+        "z": 0
+      },
+      {
+        "name": "Héroes y enemigos",
+        "detail": "Apariencias, habilidades y comportamientos alimentan la simulación de combate.",
+        "id": "n6",
+        "x": 2,
+        "y": 4,
+        "z": 1
+      }
+    ],
+    "limit": "Proyecto experimental inspirado en obras literarias. El esquema de mapas incluido es un recurso técnico del proyecto, no una captura del juego.",
+    "source": "Biblioverse_38_Mapas_3D_Proyecto_Completo.zip · README.md, src/data/literarySetpiecesV38.js, src/render/LiteraryArchitectureV38.js",
+    "images": [
+      "projects/biblio/maps.webp"
+    ],
+    "mediaNote": "Esquema técnico de los mapas incluido en la versión 38; no es una captura WebGL del juego.",
+    "en": {
+      "tag": "Game · 3D worlds",
+      "summary": "An action game inspired by literary worlds, with Three.js environments, characters, abilities and progression. Navigation, collisions and decoration are separated to align visible spaces with traversable routes.",
+      "features": [
+        "18 maps and 16 heroes with appearances and abilities.",
+        "3D and pixel-art modes on three-dimensional environments.",
+        "Enemies, bosses and progression systems.",
+        "Location-specific architecture anchored to collision obstacles.",
+        "Instanced geometry and quality settings to control rendering cost.",
+        "Adjust the density of architecture and decoration per sector through quality profiles."
+      ],
+      "nodes": [
+        {
+          "name": "Input",
+          "detail": "Controls capture player movement and actions.",
+          "id": "n0",
+          "x": -6,
+          "y": 2,
+          "z": 0
+        },
+        {
+          "name": "Simulation",
+          "detail": "Systems update combat, abilities and progression.",
+          "id": "n1",
+          "x": -2,
+          "y": 2,
+          "z": 0
+        },
+        {
+          "name": "Navigation",
+          "detail": "MapNavigation defines obstacles and valid routes.",
+          "id": "n2",
+          "x": -2,
+          "y": -2,
+          "z": 0
+        },
+        {
+          "name": "Environment",
+          "detail": "Decoration uses existing obstacles and shared geometries.",
+          "id": "n3",
+          "x": 2,
+          "y": -2,
+          "z": 1
+        },
+        {
+          "name": "Three.js render",
+          "detail": "The camera, characters and environment use the selected visual mode.",
+          "id": "n4",
+          "x": 5,
+          "y": 1,
+          "z": 2
+        },
+        {
+          "name": "Map catalogue",
+          "detail": "Each location supplies obstacles, visual identity and architectural placement rules.",
+          "id": "n5",
+          "x": -6,
+          "y": -2,
+          "z": 0
+        },
+        {
+          "name": "Heroes and enemies",
+          "detail": "Skins, abilities and behaviours supply the combat simulation.",
+          "id": "n6",
+          "x": 2,
+          "y": 4,
+          "z": 1
+        }
+      ],
+      "limit": "An experimental project inspired by literary works. The included map diagram is a technical asset, not an in-game screenshot.",
+      "mediaNote": "Technical map diagram included in version 38, not a WebGL game screenshot.",
+      "edges": [
+        {
+          "from": "n0",
+          "to": "n1",
+          "label": "action"
+        },
+        {
+          "from": "n6",
+          "to": "n1",
+          "label": "ability / opponent"
+        },
+        {
+          "from": "n5",
+          "to": "n2",
+          "label": "obstacles"
+        },
+        {
+          "from": "n2",
+          "to": "n1",
+          "label": "valid movement"
+        },
+        {
+          "from": "n2",
+          "to": "n3",
+          "label": "anchors"
+        },
+        {
+          "from": "n5",
+          "to": "n3",
+          "label": "local motifs"
+        },
+        {
+          "from": "n1",
+          "to": "n4",
+          "label": "game state"
+        },
+        {
+          "from": "n3",
+          "to": "n4",
+          "label": "geometry"
+        }
+      ],
+      "engineering": [
+        "MapNavigation.js defines traversable space. LiteraryArchitectureV38.js places recognisable elements on existing obstacles while retaining each map’s original collisions.",
+        "WorldRenderer.js renders the three-dimensional environment in both 3D and pixel-art modes. The visual choice shares a common navigation geometry.",
+        "Quality profiles vary the number of motifs per sector and the density of instanced ground detail. For example, Urithiru uses terraces and Luthadel uses metallic towers to distinguish locations."
+      ]
+    },
+    "edges": [
+      {
+        "from": "n0",
+        "to": "n1",
+        "label": "acción"
+      },
+      {
+        "from": "n6",
+        "to": "n1",
+        "label": "habilidad / rival"
+      },
+      {
+        "from": "n5",
+        "to": "n2",
+        "label": "obstáculos"
+      },
+      {
+        "from": "n2",
+        "to": "n1",
+        "label": "movimiento válido"
+      },
+      {
+        "from": "n2",
+        "to": "n3",
+        "label": "anclajes"
+      },
+      {
+        "from": "n5",
+        "to": "n3",
+        "label": "motivos locales"
+      },
+      {
+        "from": "n1",
+        "to": "n4",
+        "label": "estado de juego"
+      },
+      {
+        "from": "n3",
+        "to": "n4",
+        "label": "geometría"
+      }
+    ],
+    "engineering": [
+      "MapNavigation.js define el espacio transitable. LiteraryArchitectureV38.js coloca elementos reconocibles sobre obstáculos existentes y mantiene las colisiones originales de cada mapa.",
+      "WorldRenderer.js representa el escenario tridimensional en los modos 3D y pixelart. La elección estética convive con una geometría común de navegación.",
+      "Los perfiles de calidad varían la cantidad de motivos por sector y el detalle de suelo instanciado. Por ejemplo, Urithiru emplea terrazas y Luthadel torres metalizadas para distinguir localizaciones."
+    ]
+  }
+]
